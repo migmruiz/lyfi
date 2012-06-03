@@ -8,11 +8,13 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.ParseException;
 
+import br.lyfi.LyricsFinder;
+
 /**
  * Command-line user interface for LyricsFinder
  * 
  * @author migmruiz
- *
+ * 
  */
 public class LyricsFinderCommandLineUI {
 
@@ -21,11 +23,12 @@ public class LyricsFinderCommandLineUI {
 	 */
 	public static void main(String[] args) {
 		Options options = new Options();
-		options.addOption(new Option("opt", "description"));
+		boolean hasArg = true;
+		options.addOption(new Option("opt", "longOpt", hasArg, "description"));
 		CommandLineParser parser = new GnuParser();
+		CommandLine cmd = null;
 		try {
-			@SuppressWarnings("unused")
-			CommandLine cmd = parser.parse(options, args);
+			cmd = parser.parse(options, args);
 		} catch (ParseException e) {
 			printUsage(options);
 
@@ -33,17 +36,26 @@ public class LyricsFinderCommandLineUI {
 			e.printStackTrace();
 		}
 
+		if (cmd.hasOption("opt_indexDir") && cmd.hasOption("opt_dataDir")) {
+			LyricsFinder lyfi = new LyricsFinder(
+					cmd.getOptionValue("opt_indexDir"),
+					cmd.getOptionValue("opt_dataDir"));
+
+			if (cmd.hasOption("opt_lyricsExp")) {
+				lyfi.find(cmd.getOptionValue("opt_lyricsExp"));
+			}
+		}
+
 	}
-	
+
 	/**
 	 * Print default usage mensage
 	 * 
 	 * @param options
 	 */
 	private static void printUsage(Options options) {
-		// automatically generate the help statement
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp( "lyfi", options );
+		formatter.printHelp("lyfi", options);
 	}
 
 }

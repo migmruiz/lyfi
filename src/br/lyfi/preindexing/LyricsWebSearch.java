@@ -6,6 +6,6 @@ package br.lyfi.preindexing;
  * @author migmruiz
  *
  */
-public class LyricsSearch {
+public class LyricsWebSearch {
 	// TODO implement the web search using ID3 tags from a given mp3 file
 }

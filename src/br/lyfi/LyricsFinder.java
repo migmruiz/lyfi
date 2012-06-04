@@ -1,9 +1,14 @@
 package br.lyfi;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexNotFoundException;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 
 import br.lyfi.indexing.IndexMaker;
 import br.lyfi.postindexing.LyricsIndexFinder;
@@ -24,17 +29,40 @@ public class LyricsFinder {
 
 	private LyricsIndexFinder finder;
 
+	private IndexWriter indexWriter;
+
 	public LyricsFinder(String indexDirectory, String dataDirectory) {
 		this.indexDirectory = indexDirectory;
 		this.dataDirectory = dataDirectory;
 
 		createLuceneIndex();
 		createIndexFinder();
+
+		
+		// close the indexWriter
+		Directory dir = null;
+		try {
+			dir = FSDirectory.open(new File(indexDirectory));
+			indexWriter.close();
+		} catch (CorruptIndexException e) {
+			throw new RuntimeException("Index is corrupted", e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			try {
+				if (IndexWriter.isLocked(dir)) {
+					IndexWriter.unlock(dir);
+				}
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	public String find(String lyricsExp) {
+
 		try {
-			finder.find("cause I'm the taxman");
+			finder.find(lyricsExp);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -45,26 +73,27 @@ public class LyricsFinder {
 
 	private void createLuceneIndex() {
 		IndexMaker indexMaker = new IndexMaker(indexDirectory, dataDirectory);
-		// Create IndexWriter
 		indexMaker.createIndexWriter();
 		try {
 			// Index data
 			indexMaker.indexData();
 		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("File not found", e);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		indexWriter = indexMaker.getIndexWriter();
 	}
 
 	private void createIndexFinder() {
-		/*
-		 * Create instance of IndexSearcher
-		 */
+
+		// Create instance of IndexSearcher
 		try {
-			finder = new LyricsIndexFinder(indexDirectory);
+			finder = new LyricsIndexFinder(indexWriter);
 		} catch (CorruptIndexException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Index Corrupted", e);
+		} catch (IndexNotFoundException e) {
+			throw new RuntimeException("Index not found", e);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

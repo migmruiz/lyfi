@@ -113,6 +113,7 @@ public class IndexMaker {
 	/**
 	 * This method reads data directory and loads all properties files. It
 	 * extracts various fields and writes them to the index using IndexWriter.
+	 * @return true if it has files to index and false if it doesn't
 	 * 
 	 * @throws IOException
 	 * @throws FileNotFoundException
@@ -120,8 +121,8 @@ public class IndexMaker {
 	public void indexData() throws FileNotFoundException, IOException {
 		
 		// TODO analyze ID3 tags from mp3 files
-
-		File[] files = getFilesToBeIndxed();
+		
+		File[] files = getFilesToBeIndexed();
 		for (File file : files) {
 			Properties properties = new Properties();
 			properties.load(new FileInputStream(file));
@@ -189,12 +190,16 @@ public class IndexMaker {
 			indexWriter.addDocument(doc);
 		}
 		/*
-		 * Commits all changes to the index and closes all associated files.
+		 * Commits all changes to the index.
 		 */
-		indexWriter.close();
+		indexWriter.commit();
+	}
+	
+	public IndexWriter getIndexWriter() {
+		return indexWriter;
 	}
 
-	private File[] getFilesToBeIndxed() {
+	private File[] getFilesToBeIndexed() {
 		File dataDir = new File(dataDirectory);
 		if (!dataDir.exists()) {
 			throw new RuntimeException(dataDirectory + " does not exist");

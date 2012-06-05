@@ -1,10 +1,16 @@
 package br.lyfi.indexing;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.Vector;
+import java.util.regex.Pattern;
+
+import lyrics.crawler.Crawler;
+import lyrics.crawler.LyricsNotFoundException;
+import lyrics.crawler.LyricsWikiaCrawler;
+import lyrics.crawler.MetroLyricsCrawler;
+import lyrics.crawler.SongLyricsCrawler;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -16,6 +22,11 @@ import org.apache.lucene.index.KeepOnlyLastCommitDeletionPolicy;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
 
 /**
  * 
@@ -41,44 +52,6 @@ public class IndexMaker {
 		this(System.getProperty("user.dir"), System
 				.getProperty("java.io.tmpdir"));
 	}
-
-	/*
-	public void makeIndex() {
-		File path = new File(indexDirectory);
-		// Create instance of Directory where index files will be stored
-		Directory fsDirectory = null;
-		try {
-			fsDirectory = FSDirectory.open(path);
-		} catch (IOException e) {
-			// TOD_O Auto-generated catch block
-			e.printStackTrace();
-		}
-		/*
-		 * Create instance of analyzer, which will be used to tokenize the input
-		 * data
-		 *_
-		Analyzer standardAnalyzer = new StandardAnalyzer(Version.LUCENE_36);
-		IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_36,
-				standardAnalyzer);
-
-		config.setIndexDeletionPolicy(new KeepOnlyLastCommitDeletionPolicy());
-		
-		// Create a new index
-		try {
-			IndexWriter indexWriter = new IndexWriter(fsDirectory, config);
-		} catch (CorruptIndexException e) {
-			// TOD_O Auto-generated catch block
-			e.printStackTrace();
-		} catch (LockObtainFailedException e) {
-			// TOD_O Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TOD_O Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-	*/
 	
 	/**
 	 * This method creates an instance of IndexWriter which is used to add
@@ -120,71 +93,98 @@ public class IndexMaker {
 	 */
 	public void indexData() throws FileNotFoundException, IOException {
 		
-		// TODO analyze ID3 tags from mp3 files
-		
 		File[] files = getFilesToBeIndexed();
 		for (File file : files) {
-			Properties properties = new Properties();
-			properties.load(new FileInputStream(file));
-
+			
 			/* Step 1. Prepare the data for indexing. Extract the data. */
-			String sender = properties.getProperty("sender");
-			String receiver = properties.getProperty("receiver");
-			String date = properties.getProperty("date");
-			String month = properties.getProperty("month");
-			String subject = properties.getProperty("subject");
-			String message = properties.getProperty("message");
-			String emaildoc = file.getAbsolutePath();
+			
+			String lyrics = null;
+			String artist = null;
+			String title = null;
+			
+			if (file.isFile()) {
+				try {
+					AudioFile audioFile = AudioFileIO.read(file);
+					Tag tag = audioFile.getTag();
+					if (tag == null) {
+					System.out.println("warning: The file " + file
+								+ " doesn't have any tag");
+					}
+					lyrics = tag.getFirst(FieldKey.LYRICS);
+					artist = tag.getFirst(FieldKey.ARTIST);
+					title = tag.getFirst(FieldKey.TITLE);
+					if (!Pattern.matches("\\s*", lyrics)) {
+						// lyrics already in the mp3 file
+					} else {
+						// We want to look for the lyrics in the web
+						Vector<Crawler> crawlers = new Vector<Crawler>();
+						crawlers.add(new LyricsWikiaCrawler());
+						crawlers.add(new MetroLyricsCrawler());
+						crawlers.add(new SongLyricsCrawler());
+						for (Crawler crawler : crawlers) {
+							//logger.info("Searching lyrics for " + title
+							//		+ " by " + artistName + " with "
+							//		+ crawler.getClass());
+							try {
+								lyrics = crawler.getLyrics(artist, title);
+								tag.setField(FieldKey.LYRICS, lyrics);
+								audioFile.commit();
+								//notifySuccess(artist, title);
+
+								if (Pattern.matches("\\s*", lyrics)) {
+									System.out.println(lyrics + " in " + artist + " - " + title);
+									// If the lyrics are not meaningful I drop them
+									tag.setField(FieldKey.LYRICS, "");
+									audioFile.commit();
+								} else {
+									break;
+								}
+							} catch (LyricsNotFoundException ex) {
+							}
+						}
+					}
+					
+				} catch (Exception e) {
+					System.out.println("Error getting lyrics for " + file);
+				}
+			}			
+			
+			String mp3file = file.getAbsolutePath();
 
 			/* Step 2. Wrap the data in the Fields and add them to a Document */
 
 			/*
-			 * We plan to show the value of sender, subject and email document
+			 * We plan to show the value of artist, title and mp3 file
 			 * location along with the search results,for this we need to store
 			 * their values in the index
 			 */
 
-			Field senderField = new Field("sender", sender, Field.Store.YES,
+			Field artistField = new Field("artist", artist, Field.Store.YES,
 					Field.Index.NOT_ANALYZED);
 
-			Field receiverfield = new Field("receiver", receiver,
-					Field.Store.NO, Field.Index.NOT_ANALYZED);
 
-			Field subjectField = new Field("subject", subject, Field.Store.YES,
+			Field titleField = new Field("title", title, Field.Store.YES,
 					Field.Index.ANALYZED);
 
-			if (subject.toLowerCase().indexOf("pune") != -1) {
-				// Display search results that contain pune in their subject
+			if (title.toLowerCase().indexOf("pune") != -1) {
+				// Display search results that contain pune in their title
 				// first by setting boost factor
-				subjectField.setBoost(2.2F);
+				// titleField.setBoost(2.2F);
 			}
 
-			Field emaildatefield = new Field("date", date, Field.Store.NO,
-					Field.Index.NOT_ANALYZED);
-
-			Field monthField = new Field("month", month, Field.Store.NO,
-					Field.Index.NOT_ANALYZED);
-
-			Field messagefield = new Field("message", message, Field.Store.NO,
+			Field lyricsField = new Field("lyrics", lyrics, Field.Store.NO,
 					Field.Index.ANALYZED);
 
-			Field emailDocField = new Field("emailDoc", emaildoc,
+			Field mp3FileField = new Field("mp3Doc", mp3file,
 					Field.Store.YES, Field.Index.NO);
 
 			// Add these fields to a Lucene Document
 			Document doc = new Document();
-			doc.add(senderField);
-			doc.add(receiverfield);
-			doc.add(subjectField);
-			doc.add(emaildatefield);
-			doc.add(monthField);
-			doc.add(messagefield);
-			doc.add(emailDocField);
-			if (sender.toLowerCase().indexOf("job") != -1) {
-				// Display search results that contain 'job' in their sender
-				// email address
-				doc.setBoost(2.1F);
-			}
+			doc.add(artistField);
+			doc.add(titleField);
+			doc.add(lyricsField);
+			doc.add(mp3FileField);
+			
 
 			// Step 3: Add this document to Lucene Index.
 			indexWriter.addDocument(doc);

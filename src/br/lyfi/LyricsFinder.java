@@ -3,7 +3,9 @@ package br.lyfi;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Vector;
 
+import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexNotFoundException;
 import org.apache.lucene.index.IndexWriter;
@@ -38,7 +40,6 @@ public class LyricsFinder {
 		createLuceneIndex();
 		createIndexFinder();
 
-		
 		// close the indexWriter
 		Directory dir = null;
 		try {
@@ -61,14 +62,22 @@ public class LyricsFinder {
 
 	public String find(String lyricsExp) {
 
+		Vector<Document> documents;
 		try {
-			finder.find(lyricsExp);
+			documents = finder.find(lyricsExp);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		// TODO handle search output
+		
+		String output = "";
+		for (Document doc : documents) {
+			output = output + "Lyrics: " + doc.getFieldable("lyrics").stringValue()
+					+ "\n";
+			output = output + "Music file location: "
+					+ doc.getFieldable("mp3FileDoc").stringValue() + "\n";
+		}
 
-		return null;
+		return output;
 	}
 
 	private void createLuceneIndex() {

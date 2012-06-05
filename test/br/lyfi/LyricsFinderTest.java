@@ -26,10 +26,9 @@ public class LyricsFinderTest {
 		indexDirectory = "resources/indexdir";
 		dataDirectory = "resources/datadir";
 		lyfi = new LyricsFinder(indexDirectory, dataDirectory);
-		assertNotNull(lyfi);
 		numberOfLyricsExp = 1;
 		lyricsExp = new String[1];
-		lyricsExp[0] = "taxman";
+		lyricsExp[0] = "one";
 	}
 
 	/**
@@ -37,6 +36,7 @@ public class LyricsFinderTest {
 	 */
 	@Test
 	public void testFind() {
+		assertNotNull(lyfi);
 		for (int i = 0; i < numberOfLyricsExp; i++) {
 			assertNotNull(lyfi.find(lyricsExp[i]));
 		}

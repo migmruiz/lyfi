@@ -12,15 +12,21 @@ both Apache Software Foundation's projects.
 
 * [lucene core](http://lucene.apache.org/core/)
 * [apache commons cli](http://commons.apache.org/cli/)
+* [jaudiotagger](http://www.jthink.net/jaudiotagger/)
+* [lyrics](https://github.com/mariosangiorgio/lyrics)
 
 
-## Contributing
+## References
 
-1. Fork it.
-2. Create a branch (`git checkout -b my-lyfi-patch`)
-3. Commit your changes (`git commit -am "Added Foo"`)
-4. Push to the forked branch (`git push origin my-lyfi-patch`)
-5. Create an [Issue][1] with a link to your forked branch
-6. Enjoy a refreshing Lemonade and wait a bit
+### sourceforge
 
-[1]: http://github.com/github/lyfi/issues
+* [Cutting - Lucene lecture at Pisa](http://lucene.sourceforge.net/talks/pisa/)
+
+### developerWorks
+
+* [Sonawane - Using Apache Lucene to search text](http://www.ibm.com/developerworks/java/library/os-apache-lucenesearch/)
+* [Zhou - Delve inside the Lucene indexing mechanism](http://www.ibm.com/developerworks/library/wa-lucene/)
+
+### github
+
+* [Sangiorgio - LibraryExplorer](https://github.com/mariosangiorgio/lyrics/blob/master/src/main/java/lyrics/libraryExplorer/LibraryExplorer.java)

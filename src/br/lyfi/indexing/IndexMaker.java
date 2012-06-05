@@ -38,9 +38,9 @@ public class IndexMaker {
 	/* Location of data directory */
 	private String dataDirectory;
 
-	public IndexMaker(String dataDirectory, String indexDirectory) {
-		this.dataDirectory = dataDirectory;
+	public IndexMaker(String indexDirectory, String dataDirectory) {
 		this.indexDirectory = indexDirectory;
+		this.dataDirectory = dataDirectory;
 	}
 
 	public IndexMaker() {

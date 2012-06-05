@@ -31,9 +31,7 @@ public class LyricsFinderCommandLineUI {
 			cmd = parser.parse(options, args);
 		} catch (ParseException e) {
 			printUsage(options);
-
-			// TODO Log exception
-			e.printStackTrace();
+			//throw new RuntimeException(e);
 		}
 
 		if (cmd.hasOption("opt_indexDir") && cmd.hasOption("opt_dataDir")) {

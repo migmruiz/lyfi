@@ -24,7 +24,9 @@ import org.jaudiotagger.tag.Tag;
 import br.lyfi.preindexing.LyricsWebSearcher;
 
 /**
- * 
+ * This class reads the input audio files from the data directory, analyzes it's
+ * contents, search the web for it's lyrics and creates indexes and writes them
+ * in the index directory
  * 
  * @author migmruiz
  * 
@@ -35,17 +37,29 @@ public class IndexMaker {
 	/* Location of directory where index files are stored */
 	private String indexDirectory;
 
-	/* Location of data directory */
+	/* Location of the data directory */
 	private String dataDirectory;
 
+	/**
+	 * Constructor for the IndexMaker
+	 * 
+	 * @param indexDirectory
+	 *            Location of directory where index files will be stored
+	 * @param dataDirectory
+	 *            Location of the data directory
+	 */
 	public IndexMaker(String indexDirectory, String dataDirectory) {
 		this.indexDirectory = indexDirectory;
 		this.dataDirectory = dataDirectory;
 	}
 
+	/**
+	 * Default constructor, uses "java.io.tmpdir" as index directory and
+	 * "user.dir" as data directory
+	 */
 	public IndexMaker() {
-		this(System.getProperty("user.dir"), System
-				.getProperty("java.io.tmpdir"));
+		this(System.getProperty("java.io.tmpdir"), System
+				.getProperty("user.dir"));
 	}
 
 	/**
@@ -79,10 +93,8 @@ public class IndexMaker {
 	}
 
 	/**
-	 * This method reads data directory and loads all properties files. It
-	 * extracts various fields and writes them to the index using IndexWriter.
-	 * 
-	 * @return true if it has files to index and false if it doesn't
+	 * This method reads data directory and loads all audio files. It extracts
+	 * various tags and writes them to the index using IndexWriter.
 	 * 
 	 * @throws IOException
 	 * @throws FileNotFoundException
@@ -110,7 +122,7 @@ public class IndexMaker {
 					artist = tag.getFirst(FieldKey.ARTIST);
 					title = tag.getFirst(FieldKey.TITLE);
 					if (!Pattern.matches("\\s*", lyrics)) {
-						// lyrics already in the mp3 file, grab it!
+						// lyrics already in the mp3 file, use it!
 					} else {
 						// We want to look for the lyrics in the web
 						LyricsWebSearcher webSearcher = new LyricsWebSearcher();
@@ -138,12 +150,6 @@ public class IndexMaker {
 			Field titleField = new Field("title", title, Field.Store.YES,
 					Field.Index.ANALYZED);
 
-			if (title.toLowerCase().indexOf("pune") != -1) {
-				// Display search results that contain pune in their title
-				// first by setting boost factor
-				// titleField.setBoost(2.2F);
-			}
-
 			Field lyricsField = new Field("lyrics", lyrics, Field.Store.NO,
 					Field.Index.ANALYZED);
 
@@ -157,7 +163,7 @@ public class IndexMaker {
 			doc.add(lyricsField);
 			doc.add(mp3FileField);
 
-			// Step 3: Add this document to Lucene Index.
+			/* Step 3: Add this document to Lucene Index. */
 			indexWriter.addDocument(doc);
 		}
 		/*
@@ -166,10 +172,23 @@ public class IndexMaker {
 		indexWriter.commit();
 	}
 
+	/**
+	 * Getter for IndexWriter instance created that manages indexDirectory to
+	 * index dataDirectory
+	 * 
+	 * @return IndexWriter instance
+	 */
 	public IndexWriter getIndexWriter() {
 		return indexWriter;
 	}
 
+	/**
+	 * If dataDirectory does not exist, throw a RuntimeException. If it does,
+	 * lists it's files.
+	 * 
+	 * @return Returns an array of Files denoting the files in the dataDirectory
+	 *         directory.
+	 */
 	private File[] getFilesToBeIndexed() {
 		File dataDir = new File(dataDirectory);
 		if (!dataDir.exists()) {

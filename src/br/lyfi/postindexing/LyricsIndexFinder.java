@@ -30,6 +30,15 @@ public class LyricsIndexFinder {
 		finder = new IndexSearcher(indexReader);
 	}
 
+	/**
+	 * Performs a TermQuery search for the expression lyricsExp
+	 * 
+	 * @param lyricsExp
+	 *            the partial lyrics expression
+	 * @return a Vector of Documents with the top 10 hits, each Document
+	 *         representing a music file, with its associated lyrics,
+	 * @throws IOException
+	 */
 	public Vector<Document> find(String lyricsExp) throws IOException {
 
 		Term term = new Term("lyrics", lyricsExp);

@@ -33,6 +33,14 @@ public class LyricsFinder {
 
 	private IndexWriter indexWriter;
 
+	/**
+	 * Constructor to a LyricsFinder
+	 * 
+	 * @param indexDirectory
+	 *            the path to the index directory
+	 * @param dataDirectory
+	 *            the path to the data directory, data directory must exist
+	 */
 	public LyricsFinder(String indexDirectory, String dataDirectory) {
 		this.indexDirectory = indexDirectory;
 		this.dataDirectory = dataDirectory;
@@ -60,6 +68,13 @@ public class LyricsFinder {
 		}
 	}
 
+	/**
+	 * Performs a search on the indexed music library
+	 * 
+	 * @param lyricsExp
+	 *            the partial lyrics expression
+	 * @return the lyrics and full path to the mp3 file of the found lyrics
+	 */
 	public String find(String lyricsExp) {
 
 		Vector<Document> documents;
@@ -68,11 +83,11 @@ public class LyricsFinder {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 		String output = "";
 		for (Document doc : documents) {
-			output = output + "Lyrics: " + doc.getFieldable("lyrics").stringValue()
-					+ "\n";
+			output = output + "Lyrics: "
+					+ doc.getFieldable("lyrics").stringValue() + "\n";
 			output = output + "Music file location: "
 					+ doc.getFieldable("mp3FileDoc").stringValue() + "\n";
 		}
@@ -80,6 +95,10 @@ public class LyricsFinder {
 		return output;
 	}
 
+	/**
+	 * Creates a local IndexMaker to index the dataDirectory, storing the
+	 * private indexWriter too
+	 */
 	private void createLuceneIndex() {
 		IndexMaker indexMaker = new IndexMaker(indexDirectory, dataDirectory);
 		indexMaker.createIndexWriter();
@@ -94,6 +113,10 @@ public class LyricsFinder {
 		indexWriter = indexMaker.getIndexWriter();
 	}
 
+	/**
+	 * Creates a LyricsIndexFinder instance for the same index provided by
+	 * createLuceneIndex() and stores it privately
+	 */
 	private void createIndexFinder() {
 
 		// Create instance of IndexSearcher

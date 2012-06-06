@@ -28,11 +28,12 @@ public class LyricsFinder {
 	private String indexDirPath;
 	// a path to directory which contains data files that need to be indexed
 	private String dataDirPath;
-
-	private LyricsIndexFinder finder;
+	// whether or not forces a new indexing process
+	private boolean forceIndex;
 
 	private IndexWriter indexWriter;
-
+	private LyricsIndexFinder finder;
+	
 	/**
 	 * Constructor to a LyricsFinder
 	 * 
@@ -42,8 +43,25 @@ public class LyricsFinder {
 	 *            the path to the data directory, data directory must exist
 	 */
 	public LyricsFinder(String indexDirPath, String dataDirPath) {
+		this(indexDirPath, dataDirPath, false);
+	}
+	
+	/**
+	 * Constructor to a LyricsFinder
+	 * 
+	 * @param indexDirPath
+	 *            the path to the index directory
+	 * @param dataDirPath
+	 *            the path to the data directory, data directory must exist
+	 * @param forceIndex
+	 *            true if it is intended to force index files again, defaults to
+	 *            false
+	 */
+	public LyricsFinder(String indexDirPath, String dataDirPath,
+			boolean forceIndex) {
 		this.indexDirPath = indexDirPath;
 		this.dataDirPath = dataDirPath;
+		this.forceIndex = forceIndex;
 
 		createLuceneIndex();
 		createIndexFinder();
@@ -102,15 +120,28 @@ public class LyricsFinder {
 	private void createLuceneIndex() {
 		IndexMaker indexMaker = new IndexMaker(indexDirPath, dataDirPath);
 		indexMaker.createIndexWriter();
+		indexWriter = indexMaker.getIndexWriter();
 		try {
-			// Index data
-			indexMaker.indexData();
+			if (isIndexCompatibleWithData() || forceIndex) {
+				// Index data
+				indexMaker.indexData();
+			}
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException("File not found", e);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		indexWriter = indexMaker.getIndexWriter();
+	}
+	
+	/**
+	 * Compares stored index with the data directory
+	 * 
+	 * @return true if the index is compatible with the data directory
+	 * @throws IOException
+	 */
+	private boolean isIndexCompatibleWithData() throws IOException {
+		File dataDir = new File(dataDirPath);
+		return indexWriter.numDocs() < dataDir.list().length;
 	}
 
 	/**

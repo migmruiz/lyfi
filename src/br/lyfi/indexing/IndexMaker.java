@@ -100,7 +100,11 @@ public class IndexMaker {
 	 * @throws FileNotFoundException
 	 */
 	public void indexData() throws FileNotFoundException, IOException {
-
+		
+		// clean old index
+		indexWriter.deleteAll();
+		indexWriter.commit();
+		
 		File[] files = getFilesToBeIndexed();
 		for (File file : files) {
 

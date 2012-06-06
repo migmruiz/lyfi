@@ -39,11 +39,16 @@ public class LyricsIndexFinderTest {
 		dataDirPath = "resources/datadir";
 		IndexMaker indexMaker = new IndexMaker(indexDirPath, dataDirPath);
 		indexMaker.createIndexWriter();
-		indexMaker.indexData();
 		indexWriter = indexMaker.getIndexWriter();
-		numberOfLyricsExp = 1;
+		File dataDir = new File(dataDirPath);
+		if (indexWriter.numDocs() < dataDir.list().length) {
+			indexMaker.indexData();
+		}
+		numberOfLyricsExp = 3;
 		lyricsExp = new String[numberOfLyricsExp];
 		lyricsExp[0] = "one";
+		lyricsExp[1] = "then";
+		lyricsExp[2] = "better";
 	}
 
 	/**

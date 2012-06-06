@@ -37,7 +37,7 @@ public class LyricsIndexFinder {
 	 */
 	public LyricsIndexFinder(IndexWriter iw) throws CorruptIndexException,
 			IOException {
-		indexReader = IndexReader.open(iw, false);
+		indexReader = IndexReader.open(iw, true);
 		finder = new IndexSearcher(indexReader);
 	}
 

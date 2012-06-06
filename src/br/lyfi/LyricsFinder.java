@@ -3,6 +3,7 @@ package br.lyfi;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 import java.util.Vector;
 
 import org.apache.lucene.document.Document;
@@ -33,7 +34,28 @@ public class LyricsFinder {
 
 	private IndexWriter indexWriter;
 	private LyricsIndexFinder finder;
-	
+
+	/**
+	 * Default constructor, uses "java.io.tmpdir" as parent to index directory
+	 * and "user.dir" as data directory
+	 */
+	public LyricsFinder() {
+		this(System.getProperty("user.dir"));
+	}
+
+	/**
+	 * Constructor to a LyricsFinder, uses "java.io.tmpdir" as parent to index
+	 * directory
+	 * 
+	 * @param dataDirPath
+	 *            the path to the data directory, data directory must exist
+	 */
+	public LyricsFinder(String dataDirPath) {
+		this(System.getProperty("java.io.tmpdir")
+				+ System.getProperty("file.separator") + "lyfi_index",
+				dataDirPath);
+	}
+
 	/**
 	 * Constructor to a LyricsFinder
 	 * 
@@ -45,9 +67,9 @@ public class LyricsFinder {
 	public LyricsFinder(String indexDirPath, String dataDirPath) {
 		this(indexDirPath, dataDirPath, false);
 	}
-	
+
 	/**
-	 * Constructor to a LyricsFinder
+	 * Constructor to a LyricsFinder setting all the possible parameters
 	 * 
 	 * @param indexDirPath
 	 *            the path to the index directory
@@ -91,9 +113,13 @@ public class LyricsFinder {
 	 * 
 	 * @param lyricsExp
 	 *            the partial lyrics expression
-	 * @return the lyrics and full path to the mp3 file of the found lyrics
+	 * @return the an array with full path to the first mp3 file on the first
+	 *         index, the minimal description artist - title top results on the
+	 *         second and the results with the found lyrics on the third {path
+	 *         to the first, artist - title top results,artist - title and
+	 *         lyrics of top results}
 	 */
-	public String find(String lyricsExp) {
+	public String[] find(String lyricsExp) {
 
 		Vector<Document> documents;
 		try {
@@ -102,15 +128,25 @@ public class LyricsFinder {
 			throw new RuntimeException(e);
 		}
 
+		String pathToFirst;
 		String output = "";
+		String fullOutput = "";
 		for (Document doc : documents) {
-			output = output + "Lyrics: "
-					+ doc.getFieldable("lyrics").stringValue() + "\n";
-			output = output + "Music file location: "
+			output = output + "Song: " + doc.getFieldable("artist").stringValue() + " - "
+					+ doc.getFieldable("title").stringValue() + "\n";
+			output = output + "File location: "
 					+ doc.getFieldable("mp3FileDoc").stringValue() + "\n";
+			fullOutput = "Lyrics: " + doc.getFieldable("lyrics").stringValue()
+					+ "\n" + output;
+		}
+		try {
+			pathToFirst = documents.firstElement().getFieldable("mp3FileDoc")
+					.stringValue();
+		} catch (NoSuchElementException e) {
+			pathToFirst = "";
 		}
 
-		return output;
+		return new String[] { pathToFirst, output, fullOutput };
 	}
 
 	/**
@@ -132,7 +168,7 @@ public class LyricsFinder {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
 	 * Compares stored index with the data directory
 	 * 
@@ -141,7 +177,8 @@ public class LyricsFinder {
 	 */
 	private boolean isIndexCompatibleWithData() throws IOException {
 		File dataDir = new File(dataDirPath);
-		return indexWriter.numDocs() < dataDir.list().length;
+		return indexWriter.getDirectory().equals(FSDirectory.open(dataDir))
+				&& indexWriter.numDocs() < dataDir.list().length;
 	}
 
 	/**

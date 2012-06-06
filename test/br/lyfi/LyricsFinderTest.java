@@ -2,6 +2,8 @@ package br.lyfi;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,7 +11,7 @@ import org.junit.Test;
  * Sample application test
  * 
  * @author migmruiz
- *
+ * 
  */
 public class LyricsFinderTest {
 	private String testIndexDirPath;
@@ -17,7 +19,7 @@ public class LyricsFinderTest {
 	private LyricsFinder lyfi;
 	private String[] lyricsExp;
 	private int numberOfLyricsExp;
-	
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -39,12 +41,21 @@ public class LyricsFinderTest {
 	@Test
 	public void testFind() {
 		assertNotNull(lyfi);
-		String result;
+		String[] result;
+		result = new String[3];
 		for (int i = 0; i < numberOfLyricsExp; i++) {
-			System.out.println("Performing index search #" + (i + 1));
+			System.out.println("Performing index search #" + (i + 1) + ": "
+					+ lyricsExp[i]);
 			result = lyfi.find(lyricsExp[i]);
 			assertNotNull(result);
-			System.out.println(result);
+			assertNotNull(result[0]);
+			assertNotNull(result[1]);
+			assertNotNull(result[2]);
+			if (!result[2].isEmpty()) {
+				assertTrue((new File(result[0])).exists());
+			}
+			System.out.println(result[1]);
+
 		}
 	}
 }

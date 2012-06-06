@@ -54,15 +54,6 @@ public class IndexMaker {
 	}
 
 	/**
-	 * Default constructor, uses "java.io.tmpdir" as index directory and
-	 * "user.dir" as data directory
-	 */
-	public IndexMaker() {
-		this(System.getProperty("java.io.tmpdir"), System
-				.getProperty("user.dir"));
-	}
-
-	/**
 	 * This method creates an instance of IndexWriter which is used to add
 	 * Documents and write indexes on the disc.
 	 */

@@ -16,7 +16,9 @@ import org.junit.Test;
 import br.lyfi.indexing.IndexMaker;
 
 /**
- * Automated tests for the {@link br.lyfi.postindexing.LyricsIndexFinder} class
+ * Automated tests for the {@link br.lyfi.postindexing.LyricsIndexFinder} class,
+ * interesting results with The Beatles - Getting Better audio file on
+ * resources/datadir
  * 
  * @author migmruiz
  * 
@@ -35,6 +37,8 @@ public class LyricsIndexFinderTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		System.out.println(this.getClass().getSimpleName()
+				+ " test: setting up...");
 		indexDirPath = "resources/indexdir";
 		dataDirPath = "resources/datadir";
 		IndexMaker indexMaker = new IndexMaker(indexDirPath, dataDirPath);
@@ -44,11 +48,14 @@ public class LyricsIndexFinderTest {
 		if (indexWriter.numDocs() < dataDir.list().length) {
 			indexMaker.indexData();
 		}
-		numberOfLyricsExp = 3;
+		numberOfLyricsExp = 6;
 		lyricsExp = new String[numberOfLyricsExp];
 		lyricsExp[0] = "one";
 		lyricsExp[1] = "then";
 		lyricsExp[2] = "better";
+		lyricsExp[3] = "better all";
+		lyricsExp[4] = "the time"; // FIXME should give a hit, but does not
+		lyricsExp[5] = "time";
 	}
 
 	/**
@@ -87,8 +94,8 @@ public class LyricsIndexFinderTest {
 
 	/**
 	 * Test method for
-	 * {@link br.lyfi.postindexing.LyricsIndexFinder#find(java.lang.String)}
-	 * and overall benchmark.
+	 * {@link br.lyfi.postindexing.LyricsIndexFinder#find(java.lang.String)} and
+	 * overall benchmark.
 	 */
 	@Test
 	public void testFind_Benchmark() {
@@ -105,14 +112,15 @@ public class LyricsIndexFinderTest {
 				+ time);
 		for (int i = 0; i < numberOfLyricsExp; i++) {
 			try {
-				System.out.println("Performing index search #" + (i + 1)
-						+ " with String path created LyricsIndexFinder");
+				System.out.println("Performing index search #" + (i + 1) + ": \""
+						+ lyricsExp[i] + "\" with String path "
+						+ "created LyricsIndexFinder");
 				assertNotNull(lyinfiPath.find(lyricsExp[i]));
 			} catch (IOException e) {
 				fail(e.getMessage());
 			}
 		}
-		
+
 		// IndexWriter instance case
 		try {
 			time = System.nanoTime();
@@ -125,8 +133,8 @@ public class LyricsIndexFinderTest {
 				+ time);
 		for (int i = 0; i < numberOfLyricsExp; i++) {
 			try {
-				System.out.println("Performing index search #" + (i + 1)
-						+ " with IndexWriter instance created "
+				System.out.println("Performing index search #" + (i + 1) + ": \""
+						+ lyricsExp[i] + "\" with IndexWriter instance created "
 						+ "LyricsIndexFinder");
 				assertNotNull(lyinfiIW.find(lyricsExp[i]));
 			} catch (IOException e) {

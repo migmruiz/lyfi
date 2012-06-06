@@ -25,18 +25,20 @@ public class LyricsFinderCommandLineUI {
 		Options options = new Options();
 
 		options.addOption(new Option("f", "find", true,
-				"partial lyrics expression to use on query"));
-		options.addOption(new Option("d", "data-dir", true,
+				"partial lyrics expression to use on query (required)"));
+		options.addOption(new Option(
+				"d",
+				"data-dir",
+				true,
 				"directory which contains music files where"
-						+ " the search will be performed"));
+						+ " the search will be performed (optional, defaults to "
+						+ System.getProperty("user.dir") + ")"));
 		options.addOption(new Option("i", "index-dir", true,
-				"directory where lyfi will store index files"));
-		/*
-		 * options.addOption(new Option("p", "play", false,
-		 * "plays the music file" + System.getProperty("line.separator") +
-		 * "Requires sox."));
-		 */// fails
-			// TODO implement playback capabilities
+				"directory where lyfi will store index files (optional, defalts to "
+						+ System.getProperty("java.io.tmpdir")
+						+ System.getProperty("file.separator") + "lyfi_index"
+						+ ")"));
+		// WISHLIST implement playback capabilities
 		CommandLineParser parser = new GnuParser();
 		CommandLine cmd = null;
 		try {
@@ -60,11 +62,6 @@ public class LyricsFinderCommandLineUI {
 			}
 			String[] result = lyfi.find(cmd.getOptionValue("f"));
 			System.out.println(result[1]);
-			/*
-			 * if (cmd.hasOption("p")) { try { //System.out.println("play \"" +
-			 * result[0] +"\""); Runtime.getRuntime().exec("play \"" + result[0]
-			 * +"\""); } catch (IOException e) { new RuntimeException(e); } }
-			 */
 		} else {
 			printUsage(options);
 		}
@@ -76,6 +73,13 @@ public class LyricsFinderCommandLineUI {
 	 * @param options
 	 */
 	private static void printUsage(Options options) {
+		System.out.println(System.getProperty("line.separator")
+				+ System.getProperty("line.separator") + "\t\t"
+				+ "lyfi has been brought to life by"
+				+ System.getProperty("line.separator") + "\t\t"
+				+ "Miguel Mendes Ruiz (migmruiz@gmail.com),"
+				+ System.getProperty("line.separator") + "\t\t"
+				+ "please enjoy :)");
 		HelpFormatter formatter = new HelpFormatter();
 		formatter
 				.printHelp(
@@ -83,7 +87,10 @@ public class LyricsFinderCommandLineUI {
 						"Here are the options for you to find your music by partial lyrics \n"
 								+ "the first run will take some time, but then it will work\n"
 								+ " like a charm", options,
-						"\nlyfi has been brought to life by Miguel Mendes Ruiz");
+						System.getProperty("line.separator")
+								+ "usage example: lyfi"
+								+ " -d ../resources/datadir/"
+								+ " -i ../resources/indexdir/" + " -f \"better\"");
 	}
 
 }

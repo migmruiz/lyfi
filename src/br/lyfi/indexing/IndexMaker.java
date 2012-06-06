@@ -91,11 +91,11 @@ public class IndexMaker {
 	 * @throws FileNotFoundException
 	 */
 	public void indexData() throws FileNotFoundException, IOException {
-		
+
 		// clean old index
 		indexWriter.deleteAll();
 		indexWriter.commit();
-		
+
 		File[] files = getFilesToBeIndexed();
 		for (File file : files) {
 
@@ -134,9 +134,9 @@ public class IndexMaker {
 			/* Step 2. Wrap the data in the Fields and add them to a Document */
 
 			/*
-			 * We plan to show the value of artist, title, lyrics and mp3 file location
-			 * along with the search results,for this we need to store their
-			 * values in the index
+			 * We plan to show the value of artist, title, lyrics and mp3 file
+			 * location along with the search results,for this we need to store
+			 * their values in the index
 			 */
 
 			Field artistField = new Field("artist", artist, Field.Store.YES,
@@ -148,8 +148,8 @@ public class IndexMaker {
 			Field lyricsField = new Field("lyrics", lyrics, Field.Store.YES,
 					Field.Index.ANALYZED);
 
-			Field mp3FileField = new Field("mp3FileDoc", mp3file, Field.Store.YES,
-					Field.Index.NO);
+			Field mp3FileField = new Field("mp3FileDoc", mp3file,
+					Field.Store.YES, Field.Index.NO);
 
 			// Add these fields to a Lucene Document
 			Document doc = new Document();
@@ -185,6 +185,7 @@ public class IndexMaker {
 	 *         directory.
 	 */
 	private File[] getFilesToBeIndexed() {
+		// TODO lists dataDirectory's children list of files
 		File dataDir = new File(dataDirectory);
 		if (!dataDir.exists()) {
 			throw new RuntimeException(dataDirectory + " does not exist");

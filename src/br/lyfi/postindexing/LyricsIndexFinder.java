@@ -10,6 +10,7 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
@@ -57,7 +58,7 @@ public class LyricsIndexFinder {
 	}
 
 	/**
-	 * Performs a TermQuery search for the expression lyricsExp
+	 * Performs a search for the expression lyricsExp
 	 * 
 	 * @param lyricsExp
 	 *            the partial lyrics expression
@@ -67,9 +68,21 @@ public class LyricsIndexFinder {
 	 */
 	public Vector<Document> find(String lyricsExp) throws IOException {
 
-		Term term = new Term("lyrics", lyricsExp);
-		Query termQuery = new TermQuery(term);
-		TopDocs topDocs = finder.search(termQuery, 10);
+		int nQuerys = 10;
+		TopDocs topDocs;
+		String[] words = lyricsExp.trim().split(" ");
+		if (words.length == 1) {
+			Term term = new Term("lyrics", lyricsExp);
+			Query termQuery = new TermQuery(term);
+			topDocs = finder.search(termQuery, nQuerys);
+		} else {
+			PhraseQuery query = new PhraseQuery();
+			query.setSlop(1);
+			for (String word : words) {
+				query.add(new Term("lyrics", word));
+			}
+			topDocs = finder.search(query, nQuerys);
+		}
 
 		System.out.println("Total hits " + topDocs.totalHits);
 

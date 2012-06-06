@@ -20,6 +20,8 @@ public class LyricsFinderCommandLineUITest {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		System.out.println(this.getClass().getSimpleName()
+				+ " test: setting up...");
 		testIndexDirPath = "resources/indexdir";
 		testDataDirPath = "resources/datadir";
 		numberOfLyricsExp = 3;

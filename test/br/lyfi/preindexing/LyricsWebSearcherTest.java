@@ -22,6 +22,8 @@ public class LyricsWebSearcherTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		System.out.println(this.getClass().getSimpleName()
+				+ " test: setting up...");
 		webSearcher = new LyricsWebSearcher();
 	}
 

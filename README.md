@@ -1,6 +1,6 @@
 # LyricsFynder
 
-The purpose of this program is to make an text search
+The purpose of this program is to make a text search
 engine for searching inside lyrics of a personal music
 library's musics.
 
@@ -8,11 +8,12 @@ library's musics.
 ## Libraries used 
 
 The following libraries were used in this project,
-both Apache Software Foundation's projects.
+the first three are Apache Software Foundation's projects.
 
-* [lucene core](http://lucene.apache.org/core/)
-* [apache commons cli](http://commons.apache.org/cli/)
-* [jaudiotagger](http://www.jthink.net/jaudiotagger/)
+* [Apache Lucene Core](http://lucene.apache.org/core/)
+* [Apache Commons CLI](http://commons.apache.org/cli/)
+* [Apache HttpComponents' HttpClient](http://hc.apache.org/httpcomponents-client-ga/)
+* [Jaudiotagger](http://www.jthink.net/jaudiotagger/)
 * [lyrics](https://github.com/mariosangiorgio/lyrics)
 
 
@@ -20,13 +21,23 @@ both Apache Software Foundation's projects.
 
 ### sourceforge
 
-* [Cutting - Lucene lecture at Pisa](http://lucene.sourceforge.net/talks/pisa/)
+* [D. Cutting - Lucene lecture at Pisa](http://lucene.sourceforge.net/talks/pisa/)
 
 ### developerWorks
 
-* [Sonawane - Using Apache Lucene to search text](http://www.ibm.com/developerworks/java/library/os-apache-lucenesearch/)
-* [Zhou - Delve inside the Lucene indexing mechanism](http://www.ibm.com/developerworks/library/wa-lucene/)
+* [A. Sonawane - Using Apache Lucene to search text](http://www.ibm.com/developerworks/java/library/os-apache-lucenesearch/)
+* [D. P. Zhou - Delve inside the Lucene indexing mechanism](http://www.ibm.com/developerworks/library/wa-lucene/)
 
 ### github
 
-* [Sangiorgio - LibraryExplorer](https://github.com/mariosangiorgio/lyrics/blob/master/src/main/java/lyrics/libraryExplorer/LibraryExplorer.java)
+* [M. Sangiorgio - LibraryExplorer](https://github.com/mariosangiorgio/lyrics/blob/master/src/main/java/lyrics/libraryExplorer/LibraryExplorer.java)
+
+## Known issues
+
+* Analyzes only the given data folder, not it's children
+
+## Wish-list
+
+* Graphical user interface
+* Wider query parsing
+* implement playback capabilities 

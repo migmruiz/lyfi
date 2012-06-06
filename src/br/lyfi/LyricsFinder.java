@@ -132,12 +132,15 @@ public class LyricsFinder {
 		String output = "";
 		String fullOutput = "";
 		for (Document doc : documents) {
-			output = output + "Song: " + doc.getFieldable("artist").stringValue() + " - "
-					+ doc.getFieldable("title").stringValue() + "\n";
+			output = output + "Song: "
+					+ doc.getFieldable("artist").stringValue() + " - "
+					+ doc.getFieldable("title").stringValue()
+					+ System.getProperty("line.separator");
 			output = output + "File location: "
-					+ doc.getFieldable("mp3FileDoc").stringValue() + "\n";
+					+ doc.getFieldable("mp3FileDoc").stringValue()
+					+ System.getProperty("line.separator");
 			fullOutput = "Lyrics: " + doc.getFieldable("lyrics").stringValue()
-					+ "\n" + output;
+					+ System.getProperty("line.separator") + output;
 		}
 		try {
 			pathToFirst = documents.firstElement().getFieldable("mp3FileDoc")

@@ -23,7 +23,7 @@ public class LyricsWebSearcher {
 	 */
 	public LyricsWebSearcher() {
 		crawlers = new Vector<Crawler>();
-		crawlers.add(new LyricsWikiaCrawler());
+		crawlers.add(new LyricsWikiaCrawler()); 
 		crawlers.add(new MetroLyricsCrawler());
 		crawlers.add(new SongLyricsCrawler());
 	}

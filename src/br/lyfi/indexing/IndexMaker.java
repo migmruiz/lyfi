@@ -124,7 +124,7 @@ public class IndexMaker {
 					if (!Pattern.matches("\\s*", lyrics)) {
 						// lyrics already in the mp3 file, use it!
 					} else {
-						// We want to look for the lyrics in the web
+						// if not we want to look for the lyrics in the web
 						LyricsWebSearcher webSearcher = new LyricsWebSearcher();
 						lyrics = webSearcher.fetchLyrics(artist, title);
 					}
@@ -139,7 +139,7 @@ public class IndexMaker {
 			/* Step 2. Wrap the data in the Fields and add them to a Document */
 
 			/*
-			 * We plan to show the value of artist, title and mp3 file location
+			 * We plan to show the value of artist, title, lyrics and mp3 file location
 			 * along with the search results,for this we need to store their
 			 * values in the index
 			 */
@@ -150,10 +150,10 @@ public class IndexMaker {
 			Field titleField = new Field("title", title, Field.Store.YES,
 					Field.Index.ANALYZED);
 
-			Field lyricsField = new Field("lyrics", lyrics, Field.Store.NO,
+			Field lyricsField = new Field("lyrics", lyrics, Field.Store.YES,
 					Field.Index.ANALYZED);
 
-			Field mp3FileField = new Field("mp3Doc", mp3file, Field.Store.YES,
+			Field mp3FileField = new Field("mp3FileDoc", mp3file, Field.Store.YES,
 					Field.Index.NO);
 
 			// Add these fields to a Lucene Document

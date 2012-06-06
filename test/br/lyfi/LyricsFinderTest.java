@@ -26,9 +26,11 @@ public class LyricsFinderTest {
 		testIndexDirPath = "resources/indexdir";
 		testDataDirPath = "resources/datadir";
 		lyfi = new LyricsFinder(testIndexDirPath, testDataDirPath);
-		numberOfLyricsExp = 1;
+		numberOfLyricsExp = 3;
 		lyricsExp = new String[numberOfLyricsExp];
 		lyricsExp[0] = "one";
+		lyricsExp[1] = "then";
+		lyricsExp[2] = "better";
 	}
 
 	/**
@@ -37,9 +39,12 @@ public class LyricsFinderTest {
 	@Test
 	public void testFind() {
 		assertNotNull(lyfi);
+		String result;
 		for (int i = 0; i < numberOfLyricsExp; i++) {
 			System.out.println("Performing index search #" + (i + 1));
-			assertNotNull(lyfi.find(lyricsExp[i]));
+			result = lyfi.find(lyricsExp[i]);
+			assertNotNull(result);
+			System.out.println(result);
 		}
 	}
 }

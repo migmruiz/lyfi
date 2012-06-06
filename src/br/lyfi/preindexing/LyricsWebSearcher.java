@@ -8,6 +8,7 @@ import lyrics.crawler.LyricsNotFoundException;
 import lyrics.crawler.LyricsWikiaCrawler;
 import lyrics.crawler.MetroLyricsCrawler;
 import lyrics.crawler.SongLyricsCrawler;
+import lyrics.crawler.webClient.DownloadException;
 
 /**
  * Class representing an Lyric search over the Web
@@ -44,7 +45,7 @@ public class LyricsWebSearcher {
 		for (Crawler crawler : crawlers) {
 			try {
 				lyrics = crawler.getLyrics(artist, title);
-
+		
 				if (Pattern.matches("\\s*", lyrics)) {
 					System.out.println(lyrics + " in " + artist + " - " + title
 							+ " are not meaningful.");
@@ -53,7 +54,7 @@ public class LyricsWebSearcher {
 				} else {
 					break;
 				}
-			} catch (LyricsNotFoundException ex) {
+			} catch (LyricsNotFoundException | DownloadException ex) {
 			}
 		}
 		return lyrics;

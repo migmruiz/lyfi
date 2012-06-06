@@ -40,4 +40,9 @@ the first three are Apache Software Foundation's projects.
 
 * Graphical user interface
 * Wider query parsing
-* implement playback capabilities 
+* implement playback capabilities
+
+## Build
+
+    ../lyfi$ ant 
+ 

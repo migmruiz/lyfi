@@ -42,7 +42,6 @@ public class LyricsFinderTest {
 	public void testFind() {
 		assertNotNull(lyfi);
 		String[] result;
-		result = new String[3];
 		for (int i = 0; i < numberOfLyricsExp; i++) {
 			System.out.println("Performing index search #" + (i + 1) + ": "
 					+ lyricsExp[i]);

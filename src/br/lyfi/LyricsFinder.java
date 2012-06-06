@@ -158,7 +158,7 @@ public class LyricsFinder {
 		indexMaker.createIndexWriter();
 		indexWriter = indexMaker.getIndexWriter();
 		try {
-			if (isIndexCompatibleWithData() || forceIndex) {
+			if (!isIndexCompatibleWithData() || forceIndex) {
 				// Index data
 				indexMaker.indexData();
 			}
@@ -177,8 +177,7 @@ public class LyricsFinder {
 	 */
 	private boolean isIndexCompatibleWithData() throws IOException {
 		File dataDir = new File(dataDirPath);
-		return indexWriter.getDirectory().equals(FSDirectory.open(dataDir))
-				&& indexWriter.numDocs() < dataDir.list().length;
+		return indexWriter.numDocs() == dataDir.list().length;
 	}
 
 	/**

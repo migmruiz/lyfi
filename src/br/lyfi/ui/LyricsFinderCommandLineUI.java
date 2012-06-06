@@ -42,7 +42,7 @@ public class LyricsFinderCommandLineUI {
 			printUsage(options);
 			throw new RuntimeException(e);
 		}
-
+		
 		if (cmd.hasOption("f")) {
 			LyricsFinder lyfi;
 			if (cmd.hasOption("d")) {
@@ -55,15 +55,15 @@ public class LyricsFinderCommandLineUI {
 			} else {
 				lyfi = new LyricsFinder();
 			}
-			lyfi.find(cmd.getOptionValue("f"));
+			String[] result = lyfi.find(cmd.getOptionValue("f"));
+			System.out.println(result[1]);
 		} else {
 			printUsage(options);
 		}
-
 	}
 
 	/**
-	 * Print default usage mensage
+	 * Print default usage message
 	 * 
 	 * @param options
 	 */

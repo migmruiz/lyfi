@@ -12,8 +12,8 @@ import org.junit.Test;
  *
  */
 public class LyricsFinderTest {
-	private String indexDirectory;
-	private String dataDirectory;
+	private String testIndexDirPath;
+	private String testDataDirPath;
 	private LyricsFinder lyfi;
 	private String[] lyricsExp;
 	private int numberOfLyricsExp;
@@ -23,11 +23,11 @@ public class LyricsFinderTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		indexDirectory = "resources/indexdir";
-		dataDirectory = "resources/datadir";
-		lyfi = new LyricsFinder(indexDirectory, dataDirectory);
+		testIndexDirPath = "resources/indexdir";
+		testDataDirPath = "resources/datadir";
+		lyfi = new LyricsFinder(testIndexDirPath, testDataDirPath);
 		numberOfLyricsExp = 1;
-		lyricsExp = new String[1];
+		lyricsExp = new String[numberOfLyricsExp];
 		lyricsExp[0] = "one";
 	}
 
@@ -38,6 +38,7 @@ public class LyricsFinderTest {
 	public void testFind() {
 		assertNotNull(lyfi);
 		for (int i = 0; i < numberOfLyricsExp; i++) {
+			System.out.println("Performing index search #" + (i + 1));
 			assertNotNull(lyfi.find(lyricsExp[i]));
 		}
 	}

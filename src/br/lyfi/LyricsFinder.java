@@ -25,9 +25,9 @@ import br.lyfi.postindexing.LyricsIndexFinder;
 public class LyricsFinder {
 
 	// a path to directory where Lucene will store index files
-	private String indexDirectory;
+	private String indexDirPath;
 	// a path to directory which contains data files that need to be indexed
-	private String dataDirectory;
+	private String dataDirPath;
 
 	private LyricsIndexFinder finder;
 
@@ -36,14 +36,14 @@ public class LyricsFinder {
 	/**
 	 * Constructor to a LyricsFinder
 	 * 
-	 * @param indexDirectory
+	 * @param indexDirPath
 	 *            the path to the index directory
-	 * @param dataDirectory
+	 * @param dataDirPath
 	 *            the path to the data directory, data directory must exist
 	 */
-	public LyricsFinder(String indexDirectory, String dataDirectory) {
-		this.indexDirectory = indexDirectory;
-		this.dataDirectory = dataDirectory;
+	public LyricsFinder(String indexDirPath, String dataDirPath) {
+		this.indexDirPath = indexDirPath;
+		this.dataDirPath = dataDirPath;
 
 		createLuceneIndex();
 		createIndexFinder();
@@ -51,7 +51,7 @@ public class LyricsFinder {
 		// close the indexWriter
 		Directory dir = null;
 		try {
-			dir = FSDirectory.open(new File(indexDirectory));
+			dir = FSDirectory.open(new File(indexDirPath));
 			indexWriter.close();
 		} catch (CorruptIndexException e) {
 			throw new RuntimeException("Index is corrupted", e);
@@ -100,7 +100,7 @@ public class LyricsFinder {
 	 * private indexWriter too
 	 */
 	private void createLuceneIndex() {
-		IndexMaker indexMaker = new IndexMaker(indexDirectory, dataDirectory);
+		IndexMaker indexMaker = new IndexMaker(indexDirPath, dataDirPath);
 		indexMaker.createIndexWriter();
 		try {
 			// Index data
@@ -118,8 +118,6 @@ public class LyricsFinder {
 	 * createLuceneIndex() and stores it privately
 	 */
 	private void createIndexFinder() {
-
-		// Create instance of IndexSearcher
 		try {
 			finder = new LyricsIndexFinder(indexWriter);
 		} catch (CorruptIndexException e) {

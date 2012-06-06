@@ -1,5 +1,6 @@
 package br.lyfi.postindexing;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
@@ -13,6 +14,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.FSDirectory;
 
 /**
  * Class used searching indexed lyrics
@@ -24,9 +26,33 @@ public class LyricsIndexFinder {
 	private IndexSearcher finder;
 	private IndexReader indexReader;
 
+	/**
+	 * Constructor that should be faster and less error-prone as it uses the
+	 * inner references of the IndexWriter instance of the index of the search.
+	 * 
+	 * @param iw
+	 *            the IndexWriter instance of the index of the search
+	 * @throws CorruptIndexException
+	 * @throws IOException
+	 */
 	public LyricsIndexFinder(IndexWriter iw) throws CorruptIndexException,
 			IOException {
 		indexReader = IndexReader.open(iw, false);
+		finder = new IndexSearcher(indexReader);
+	}
+
+	/**
+	 * Constructor of the finder using the direct path reference to the index
+	 * directory location
+	 * 
+	 * @param indexPath
+	 *            the location of the index of the search
+	 * @throws CorruptIndexException
+	 * @throws IOException
+	 */
+	public LyricsIndexFinder(String indexPath) throws CorruptIndexException,
+			IOException {
+		indexReader = IndexReader.open(FSDirectory.open(new File(indexPath)));
 		finder = new IndexSearcher(indexReader);
 	}
 

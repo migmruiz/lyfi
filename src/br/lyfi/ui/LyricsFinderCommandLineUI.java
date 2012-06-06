@@ -23,7 +23,7 @@ public class LyricsFinderCommandLineUI {
 	 */
 	public static void main(String[] args) {
 		Options options = new Options();
-		
+
 		options.addOption(new Option("f", "find", true,
 				"partial lyrics expression to use on query"));
 		options.addOption(new Option("d", "data-dir", true,
@@ -31,9 +31,12 @@ public class LyricsFinderCommandLineUI {
 						+ " the search will be performed"));
 		options.addOption(new Option("i", "index-dir", true,
 				"directory where lyfi will store index files"));
-		options.addOption(new Option("p", "play", false,
-				"plays the music file" + System.getProperty("line.separator") + 
-				"Requires sox, but not yet implemented."));
+		/*
+		 * options.addOption(new Option("p", "play", false,
+		 * "plays the music file" + System.getProperty("line.separator") +
+		 * "Requires sox."));
+		 */// fails
+			// TODO implement playback capabilities
 		CommandLineParser parser = new GnuParser();
 		CommandLine cmd = null;
 		try {
@@ -42,7 +45,7 @@ public class LyricsFinderCommandLineUI {
 			printUsage(options);
 			throw new RuntimeException(e);
 		}
-		
+
 		if (cmd.hasOption("f")) {
 			LyricsFinder lyfi;
 			if (cmd.hasOption("d")) {
@@ -57,6 +60,11 @@ public class LyricsFinderCommandLineUI {
 			}
 			String[] result = lyfi.find(cmd.getOptionValue("f"));
 			System.out.println(result[1]);
+			/*
+			 * if (cmd.hasOption("p")) { try { //System.out.println("play \"" +
+			 * result[0] +"\""); Runtime.getRuntime().exec("play \"" + result[0]
+			 * +"\""); } catch (IOException e) { new RuntimeException(e); } }
+			 */
 		} else {
 			printUsage(options);
 		}
@@ -69,8 +77,13 @@ public class LyricsFinderCommandLineUI {
 	 */
 	private static void printUsage(Options options) {
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp("lyfi", "find your music by partial lyrics",
-				options, "lyfi has been brought to life by Miguel Mendes Ruiz");
+		formatter
+				.printHelp(
+						"lyfi",
+						"Here are the options for you to find your music by partial lyrics \n"
+								+ "the first run will take some time, but then it will work\n"
+								+ " like a charm", options,
+						"\nlyfi has been brought to life by Miguel Mendes Ruiz");
 	}
 
 }

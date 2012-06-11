@@ -33,11 +33,12 @@ public class LyricsFinderCommandLineUI {
 				"directory which contains music files where"
 						+ " the search will be performed (optional, defaults to "
 						+ System.getProperty("user.dir") + ")"));
-		options.addOption(new Option("i", "index-dir", true,
-				"directory where lyfi will store index files (optional, defalts to "
-						+ System.getProperty("java.io.tmpdir")
-						+ System.getProperty("file.separator") + "lyfi_index"
-						+ ")"));
+		options.addOption(new Option("i", "index-dir", true, "directory where "
+				+ LyricsFinder.simpleName
+				+ " will store index files (optional, defalts to "
+				+ System.getProperty("java.io.tmpdir")
+				+ System.getProperty("file.separator")
+				+ LyricsFinder.simpleName + "_index" + ")"));
 		// WISHLIST implement playback capabilities
 		CommandLineParser parser = new GnuParser();
 		CommandLine cmd = null;
@@ -75,7 +76,7 @@ public class LyricsFinderCommandLineUI {
 	private static void printUsage(Options options) {
 		System.out.println(System.getProperty("line.separator")
 				+ System.getProperty("line.separator") + "\t\t"
-				+ "lyfi has been brought to life by"
+				+ LyricsFinder.simpleName + " has been brought to life by"
 				+ System.getProperty("line.separator") + "\t\t"
 				+ "Miguel Mendes Ruiz (migmruiz@gmail.com),"
 				+ System.getProperty("line.separator") + "\t\t"
@@ -83,14 +84,15 @@ public class LyricsFinderCommandLineUI {
 		HelpFormatter formatter = new HelpFormatter();
 		formatter
 				.printHelp(
-						"lyfi",
+						LyricsFinder.simpleName,
 						"Here are the options for you to find your music by partial lyrics \n"
 								+ "the first run will take some time, but then it will work\n"
 								+ " like a charm", options,
 						System.getProperty("line.separator")
 								+ "usage example: lyfi"
 								+ " -d ../resources/datadir/"
-								+ " -i ../resources/indexdir/" + " -f \"better\"");
+								+ " -i ../resources/indexdir/"
+								+ " -f \"better\"");
 	}
 
 }

@@ -25,6 +25,11 @@ import br.lyfi.postindexing.LyricsIndexFinder;
  */
 public class LyricsFinder {
 
+	// Application constants
+
+	public final static String name = "Lyrics Finder";
+	public final static String simpleName = "lyfi";
+
 	// a path to directory where Lucene will store index files
 	private String indexDirPath;
 	// a path to directory which contains data files that need to be indexed
@@ -52,8 +57,8 @@ public class LyricsFinder {
 	 */
 	public LyricsFinder(String dataDirPath) {
 		this(System.getProperty("java.io.tmpdir")
-				+ System.getProperty("file.separator") + "lyfi_index",
-				dataDirPath);
+				+ System.getProperty("file.separator")
+				+ LyricsFinder.simpleName + "_index", dataDirPath);
 	}
 
 	/**

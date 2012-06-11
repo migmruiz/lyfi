@@ -39,10 +39,16 @@ the first three are Apache Software Foundation's projects.
 ## Wish-list
 
 * Graphical user interface
-* Wider query parsing
+* Wider query parsing.
 * implement playback capabilities
 
 ## Build
 
     ../lyfi$ ant 
- 
+
+if you experience some ${ECLIPSE_HOME} issues try to set a ECLIPSE_HOME variable pointing to your Eclipse 3.7.2:
+    
+    ../lyfi$ ECLIPSE_HOME=$HOME/.local/opt/eclipse
+    ../lyfi$ ant -Declipse.home=$ECLIPSE_HOME
+
+actually all you need is org.junit_4.8.2.v4_8_2_v20110321-1705/junit.jar and org.hamcrest.core_1.1.0.v20090501071000.jar inside a folder called plugins inside $ECLIPSE_HOME. Don't worry, I will mavenize it soon.

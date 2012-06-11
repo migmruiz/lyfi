@@ -7,19 +7,22 @@
 <project basedir="." default="build" name="lyfi">
 	<property environment="env" />
 	<property name="USER_HOME" value="${user.home}" />
+	<property name="ECLIPSE_HOME" value="${eclipse.home}" />
+	<!-- <property name="ECLIPSE_HOME" value="${USER_HOME}/.local/opt/eclipse" /> -->
+	<property name="MAVEN_LOCAL_REPO" value="${USER_HOME}/.m2/repository" />
 	<property name="junit.output.dir" value="junit" />
 	<property name="debuglevel" value="source,lines,vars" />
 	<property name="target" value="1.7" />
 	<property name="source" value="1.7" />
 	<path id="Maven Dependencies.libraryclasspath">
-		<pathelement location="${USER_HOME}/.m2/repository/commons-cli/commons-cli/1.2/commons-cli-1.2.jar" />
-		<pathelement location="${USER_HOME}/.m2/repository/org/apache/lucene/lucene-core/3.6.0/lucene-core-3.6.0.jar" />
-		<pathelement location="${USER_HOME}/.m2/repository/org/jaudiotagger/2.0.3/jaudiotagger-2.0.3.jar" />
-		<pathelement location="${USER_HOME}/.m2/repository/org/apache/httpcomponents/httpclient/4.2/httpclient-4.2.jar" />
-		<pathelement location="${USER_HOME}/.m2/repository/org/apache/httpcomponents/httpcore/4.2/httpcore-4.2.jar" />
-		<pathelement location="${USER_HOME}/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" />
-		<pathelement location="${USER_HOME}/.m2/repository/commons-codec/commons-codec/1.6/commons-codec-1.6.jar" />
-		<pathelement location="${USER_HOME}/.m2/repository/org/eclipse/swt/org.eclipse.swt.gtk.linux.x86/3.7.2/org.eclipse.swt.gtk.linux.x86-3.7.2.jar" />
+		<pathelement location="${MAVEN_LOCAL_REPO}/commons-cli/commons-cli/1.2/commons-cli-1.2.jar" />
+		<pathelement location="${MAVEN_LOCAL_REPO}/org/apache/lucene/lucene-core/3.6.0/lucene-core-3.6.0.jar" />
+		<pathelement location="${MAVEN_LOCAL_REPO}/org/jaudiotagger/2.0.3/jaudiotagger-2.0.3.jar" />
+		<pathelement location="${MAVEN_LOCAL_REPO}/org/apache/httpcomponents/httpclient/4.2/httpclient-4.2.jar" />
+		<pathelement location="${MAVEN_LOCAL_REPO}/org/apache/httpcomponents/httpcore/4.2/httpcore-4.2.jar" />
+		<pathelement location="${MAVEN_LOCAL_REPO}y/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" />
+		<pathelement location="${MAVEN_LOCAL_REPO}/commons-codec/commons-codec/1.6/commons-codec-1.6.jar" />
+		<pathelement location="${MAVEN_LOCAL_REPO}/org/eclipse/swt/org.eclipse.swt.gtk.linux.x86/3.7.2/org.eclipse.swt.gtk.linux.x86-3.7.2.jar" />
 	</path>
 	<path id="JUnit 4.libraryclasspath">
 		<pathelement location="${ECLIPSE_HOME}/plugins/org.junit_4.8.2.v4_8_2_v20110321-1705/junit.jar" />
@@ -60,15 +63,7 @@
 		<path refid="lyfi.classpath" />
 		<path refid="Maven Dependencies.libraryclasspath" />
 	</path>
-	<target name="eclipse-home-set-props-if-set" if="${eclipse.home}">
-		<property name="ECLIPSE_HOME" value="${eclipse.home}" />
-	</target>
-
-	<target name="eclipse-home-set-props-if-not-set" unless="${eclipse.home}">
-		<property name="ECLIPSE_HOME" value="${USER_HOME}/.local/opt/eclipse" />
-	</target>
-	<target name="setProps" depends="eclipse-home-set-props-if-set, eclipse-home-set-props-if-not-set" />
-	<target name="init" depends="setProps">
+	<target name="init">
 		<mkdir dir="target/classes" />
 		<mkdir dir="target/test-classes" />
 		<copy includeemptydirs="false" todir="target/classes">
@@ -114,14 +109,14 @@
 			<fileset dir="target/classes" />
 			<zipfileset dir="${ECLIPSE_HOME}/plugins/org.junit_4.8.2.v4_8_2_v20110321-1705" includes="junit.jar" />
 			<zipfileset dir="${ECLIPSE_HOME}/plugins" includes="org.hamcrest.core_1.1.0.v20090501071000.jar" />
-			<zipfileset dir="${USER_HOME}/.workspaces/default/lyfi/lib" includes="lyrics-0.0.2-SNAPSHOT.jar" />
-			<zipfileset dir="${USER_HOME}/.m2/repository/commons-cli/commons-cli/1.2" includes="commons-cli-1.2.jar" />
-			<zipfileset dir="${USER_HOME}/.m2/repository/org/apache/lucene/lucene-core/3.6.0" includes="lucene-core-3.6.0.jar" />
-			<zipfileset dir="${USER_HOME}/.m2/repository/org/jaudiotagger/2.0.3" includes="jaudiotagger-2.0.3.jar" />
-			<zipfileset dir="${USER_HOME}/.m2/repository/org/apache/httpcomponents/httpclient/4.2" includes="httpclient-4.2.jar" />
-			<zipfileset dir="${USER_HOME}/.m2/repository/org/apache/httpcomponents/httpcore/4.2" includes="httpcore-4.2.jar" />
-			<zipfileset dir="${USER_HOME}/.m2/repository/commons-logging/commons-logging/1.1.1" includes="commons-logging-1.1.1.jar" />
-			<zipfileset dir="${USER_HOME}/.m2/repository/commons-codec/commons-codec/1.6" includes="commons-codec-1.6.jar" />
+			<zipfileset dir="lib" includes="lyrics-0.0.2-SNAPSHOT.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/commons-cli/commons-cli/1.2" includes="commons-cli-1.2.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/apache/lucene/lucene-core/3.6.0" includes="lucene-core-3.6.0.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/jaudiotagger/2.0.3" includes="jaudiotagger-2.0.3.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/apache/httpcomponents/httpclient/4.2" includes="httpclient-4.2.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/apache/httpcomponents/httpcore/4.2" includes="httpcore-4.2.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/commons-logging/commons-logging/1.1.1" includes="commons-logging-1.1.1.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/commons-codec/commons-codec/1.6" includes="commons-codec-1.6.jar" />
 		</jar>
 	</target>
 	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects" />

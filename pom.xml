@@ -59,6 +59,11 @@
 			<!-- <version>3.3.0-v3346</version> -->
 			<version>3.7.2</version>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>

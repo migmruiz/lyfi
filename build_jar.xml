@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?eclipse.ant.import?>
 <project default="create_run_jar" name="Create Runnable Jar for Project lyfi with Jar-in-Jar Loader">
 	<!--this file was created by Eclipse Runnable JAR Export Wizard-->
 	<!--ANT 1.7 is required                                        -->
 	<property environment="env" />
 	<property name="USER_HOME" value="${user.home}" />
-	<property name="ECLIPSE_HOME" value="${eclipse.home}" />
-	<!-- <property name="ECLIPSE_HOME" value="${USER_HOME}/.local/opt/eclipse" /> -->
+	<property name="MAVEN_LOCAL_REPO" value="${USER_HOME}/.m2/repository" />
 	<target name="create_run_jar">
 		<jar destfile="export/lyfi_0-5.jar">
 			<manifest>
 				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader" />
 				<attribute name="Rsrc-Main-Class" value="br.lyfi.ui.LyricsFinderCommandLineUI" />
 				<attribute name="Class-Path" value="." />
-				<attribute name="Rsrc-Class-Path" value="./ junit.jar org.hamcrest.core_1.1.0.v20090501071000.jar lyrics-0.0.2-SNAPSHOT.jar commons-cli-1.2.jar lucene-core-3.6.0.jar jaudiotagger-2.0.3.jar httpclient-4.2.jar httpcore-4.2.jar commons-logging-1.1.1.jar commons-codec-1.6.jar" />
+				<attribute name="Rsrc-Class-Path" value="./ lyrics-0.0.2-SNAPSHOT.jar commons-cli-1.2.jar lucene-core-3.6.0.jar jaudiotagger-2.0.3.jar httpclient-4.2.jar httpcore-4.2.jar commons-logging-1.1.1.jar commons-codec-1.6.jar org.eclipse.swt.gtk.linux.x86-3.7.2.jar junit-4.10.jar hamcrest-core-1.1.jar" />
 			</manifest>
 			<zipfileset src="jar-in-jar-loader.zip" />
 			<fileset dir="target/classes" />
-			<zipfileset dir="${ECLIPSE_HOME}/plugins/org.junit_4.8.2.v4_8_2_v20110321-1705" includes="junit.jar" />
-			<zipfileset dir="${ECLIPSE_HOME}/plugins" includes="org.hamcrest.core_1.1.0.v20090501071000.jar" />
 			<zipfileset dir="lib" includes="lyrics-0.0.2-SNAPSHOT.jar" />
-			<zipfileset dir="${USER_HOME}/.m2/repository/commons-cli/commons-cli/1.2" includes="commons-cli-1.2.jar" />
-			<zipfileset dir="${USER_HOME}/.m2/repository/org/apache/lucene/lucene-core/3.6.0" includes="lucene-core-3.6.0.jar" />
-			<zipfileset dir="${USER_HOME}/.m2/repository/org/jaudiotagger/2.0.3" includes="jaudiotagger-2.0.3.jar" />
-			<zipfileset dir="${USER_HOME}/.m2/repository/org/apache/httpcomponents/httpclient/4.2" includes="httpclient-4.2.jar" />
-			<zipfileset dir="${USER_HOME}/.m2/repository/org/apache/httpcomponents/httpcore/4.2" includes="httpcore-4.2.jar" />
-			<zipfileset dir="${USER_HOME}/.m2/repository/commons-logging/commons-logging/1.1.1" includes="commons-logging-1.1.1.jar" />
-			<zipfileset dir="${USER_HOME}/.m2/repository/commons-codec/commons-codec/1.6" includes="commons-codec-1.6.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/commons-cli/commons-cli/1.2" includes="commons-cli-1.2.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/apache/lucene/lucene-core/3.6.0" includes="lucene-core-3.6.0.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/jaudiotagger/2.0.3" includes="jaudiotagger-2.0.3.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/apache/httpcomponents/httpclient/4.2" includes="httpclient-4.2.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/apache/httpcomponents/httpcore/4.2" includes="httpcore-4.2.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/commons-logging/commons-logging/1.1.1" includes="commons-logging-1.1.1.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/commons-codec/commons-codec/1.6" includes="commons-codec-1.6.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/eclipse/swt/org.eclipse.swt.gtk.linux.x86/3.7.2" includes="org.eclipse.swt.gtk.linux.x86-3.7.2.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/junit/junit/4.10" includes="junit-4.10.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/hamcrest/hamcrest-core/1.1" includes="hamcrest-core-1.1.jar" />
 		</jar>
 	</target>
 </project>
+

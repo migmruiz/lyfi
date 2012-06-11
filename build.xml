@@ -6,33 +6,29 @@
               as the first entry and export the buildfile again. -->
 <project basedir="." default="build" name="lyfi">
 	<property environment="env" />
-	<property name="USER_HOME" value="${user.home}" />
-	<property name="ECLIPSE_HOME" value="${eclipse.home}" />
-	<!-- <property name="ECLIPSE_HOME" value="${USER_HOME}/.local/opt/eclipse" /> -->
-	<property name="MAVEN_LOCAL_REPO" value="${USER_HOME}/.m2/repository" />
 	<property name="junit.output.dir" value="junit" />
 	<property name="debuglevel" value="source,lines,vars" />
 	<property name="target" value="1.7" />
 	<property name="source" value="1.7" />
+	<import file="build_jar.xml" />
+	<!--<property name="ECLIPSE_HOME" value="${USER_HOME}/.local/opt/eclipse" />-->
+	<property name="ECLIPSE_HOME" value="${eclipse.home}" />
 	<path id="Maven Dependencies.libraryclasspath">
 		<pathelement location="${MAVEN_LOCAL_REPO}/commons-cli/commons-cli/1.2/commons-cli-1.2.jar" />
 		<pathelement location="${MAVEN_LOCAL_REPO}/org/apache/lucene/lucene-core/3.6.0/lucene-core-3.6.0.jar" />
 		<pathelement location="${MAVEN_LOCAL_REPO}/org/jaudiotagger/2.0.3/jaudiotagger-2.0.3.jar" />
 		<pathelement location="${MAVEN_LOCAL_REPO}/org/apache/httpcomponents/httpclient/4.2/httpclient-4.2.jar" />
 		<pathelement location="${MAVEN_LOCAL_REPO}/org/apache/httpcomponents/httpcore/4.2/httpcore-4.2.jar" />
-		<pathelement location="${MAVEN_LOCAL_REPO}y/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" />
+		<pathelement location="${MAVEN_LOCAL_REPO}/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" />
 		<pathelement location="${MAVEN_LOCAL_REPO}/commons-codec/commons-codec/1.6/commons-codec-1.6.jar" />
 		<pathelement location="${MAVEN_LOCAL_REPO}/org/eclipse/swt/org.eclipse.swt.gtk.linux.x86/3.7.2/org.eclipse.swt.gtk.linux.x86-3.7.2.jar" />
-	</path>
-	<path id="JUnit 4.libraryclasspath">
-		<pathelement location="${ECLIPSE_HOME}/plugins/org.junit_4.8.2.v4_8_2_v20110321-1705/junit.jar" />
-		<pathelement location="${ECLIPSE_HOME}/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar" />
+		<pathelement location="${MAVEN_LOCAL_REPO}/junit/junit/4.10/junit-4.10.jar" />
+		<pathelement location="${MAVEN_LOCAL_REPO}/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" />
 	</path>
 	<path id="lyfi.classpath">
 		<pathelement location="target/classes" />
 		<pathelement location="target/test-classes" />
 		<path refid="Maven Dependencies.libraryclasspath" />
-		<path refid="JUnit 4.libraryclasspath" />
 		<pathelement location="lib/lyrics-0.0.2-SNAPSHOT.jar" />
 	</path>
 	<path id="run.LyricsFinderCommandLineUITest.classpath">
@@ -80,44 +76,21 @@
 	<target name="clean">
 		<delete dir="target/classes" />
 		<delete dir="target/test-classes" />
+		<delete file="export/lyfi_0-5.jar"/>
 	</target>
 	<target depends="clean" name="cleanall" />
-	<target depends="build-subprojects,build-project,create_run_jar" name="build">
-		<echo message="${ant.project.name}: ${ant.file}" />
-	</target>
+	<target depends="build-subprojects,build-project,create_run_jar" name="build" />
 	<target name="build-subprojects" />
 	<target depends="init" name="build-project">
 		<echo message="${ant.project.name}: ${ant.file}" />
-		<javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" includeantruntime="false" target="${target}">
+		<javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" target="${target}">
 			<src path="src" />
 			<classpath refid="lyfi.classpath" />
 		</javac>
-		<javac debug="true" debuglevel="${debuglevel}" destdir="target/test-classes" source="${source}" includeantruntime="false" target="${target}">
+		<javac debug="true" debuglevel="${debuglevel}" destdir="target/test-classes" source="${source}" target="${target}">
 			<src path="test" />
 			<classpath refid="lyfi.classpath" />
 		</javac>
-	</target>
-	<target name="create_run_jar">
-		<jar destfile="export/lyfi_0-5.jar">
-			<manifest>
-				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader" />
-				<attribute name="Rsrc-Main-Class" value="br.lyfi.ui.LyricsFinderCommandLineUI" />
-				<attribute name="Class-Path" value="." />
-				<attribute name="Rsrc-Class-Path" value="./ junit.jar org.hamcrest.core_1.1.0.v20090501071000.jar lyrics-0.0.2-SNAPSHOT.jar commons-cli-1.2.jar lucene-core-3.6.0.jar jaudiotagger-2.0.3.jar httpclient-4.2.jar httpcore-4.2.jar commons-logging-1.1.1.jar commons-codec-1.6.jar" />
-			</manifest>
-			<zipfileset src="jar-in-jar-loader.zip" />
-			<fileset dir="target/classes" />
-			<zipfileset dir="${ECLIPSE_HOME}/plugins/org.junit_4.8.2.v4_8_2_v20110321-1705" includes="junit.jar" />
-			<zipfileset dir="${ECLIPSE_HOME}/plugins" includes="org.hamcrest.core_1.1.0.v20090501071000.jar" />
-			<zipfileset dir="lib" includes="lyrics-0.0.2-SNAPSHOT.jar" />
-			<zipfileset dir="${MAVEN_LOCAL_REPO}/commons-cli/commons-cli/1.2" includes="commons-cli-1.2.jar" />
-			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/apache/lucene/lucene-core/3.6.0" includes="lucene-core-3.6.0.jar" />
-			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/jaudiotagger/2.0.3" includes="jaudiotagger-2.0.3.jar" />
-			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/apache/httpcomponents/httpclient/4.2" includes="httpclient-4.2.jar" />
-			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/apache/httpcomponents/httpcore/4.2" includes="httpcore-4.2.jar" />
-			<zipfileset dir="${MAVEN_LOCAL_REPO}/commons-logging/commons-logging/1.1.1" includes="commons-logging-1.1.1.jar" />
-			<zipfileset dir="${MAVEN_LOCAL_REPO}/commons-codec/commons-codec/1.6" includes="commons-codec-1.6.jar" />
-		</jar>
 	</target>
 	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects" />
 	<target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">

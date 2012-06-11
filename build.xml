@@ -1,27 +1,202 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar" name="Create Runnable Jar for Project lyfi with Jar-in-Jar Loader">
-    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
-    <!--ANT 1.7 is required                                        -->
-    <target name="create_run_jar">
-        <jar destfile="export/lyfi_0-5.jar">
-            <manifest>
-                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
-                <attribute name="Rsrc-Main-Class" value="br.lyfi.ui.LyricsFinderCommandLineUI"/>
-                <attribute name="Class-Path" value="."/>
-                <attribute name="Rsrc-Class-Path" value="./ junit.jar org.hamcrest.core_1.1.0.v20090501071000.jar lyrics-0.0.2-SNAPSHOT.jar commons-cli-1.2.jar lucene-core-3.6.0.jar jaudiotagger-2.0.3.jar httpclient-4.2.jar httpcore-4.2.jar commons-logging-1.1.1.jar commons-codec-1.6.jar"/>
-            </manifest>
-            <zipfileset src="jar-in-jar-loader.zip"/>
-            <fileset dir="target/classes"/>
-            <zipfileset dir="../../../.local/opt/eclipse/plugins/org.junit_4.8.2.v4_8_2_v20110321-1705" includes="junit.jar"/>
-            <zipfileset dir="../../../.local/opt/eclipse/plugins" includes="org.hamcrest.core_1.1.0.v20090501071000.jar"/>
-            <zipfileset dir="../../../.workspaces/default/lyfi/lib" includes="lyrics-0.0.2-SNAPSHOT.jar"/>
-            <zipfileset dir="../../../.m2/repository/commons-cli/commons-cli/1.2" includes="commons-cli-1.2.jar"/>
-            <zipfileset dir="../../../.m2/repository/org/apache/lucene/lucene-core/3.6.0" includes="lucene-core-3.6.0.jar"/>
-            <zipfileset dir="../../../.m2/repository/org/jaudiotagger/2.0.3" includes="jaudiotagger-2.0.3.jar"/>
-            <zipfileset dir="../../../.m2/repository/org/apache/httpcomponents/httpclient/4.2" includes="httpclient-4.2.jar"/>
-            <zipfileset dir="../../../.m2/repository/org/apache/httpcomponents/httpcore/4.2" includes="httpcore-4.2.jar"/>
-            <zipfileset dir="../../../.m2/repository/commons-logging/commons-logging/1.1.1" includes="commons-logging-1.1.1.jar"/>
-            <zipfileset dir="../../../.m2/repository/commons-codec/commons-codec/1.6" includes="commons-codec-1.6.jar"/>
-        </jar>
-    </target>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="lyfi">
+	<property environment="env" />
+	<property name="USER_HOME" value="${user.home}" />
+	<property name="junit.output.dir" value="junit" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.7" />
+	<property name="source" value="1.7" />
+	<path id="Maven Dependencies.libraryclasspath">
+		<pathelement location="${USER_HOME}/.m2/repository/commons-cli/commons-cli/1.2/commons-cli-1.2.jar" />
+		<pathelement location="${USER_HOME}/.m2/repository/org/apache/lucene/lucene-core/3.6.0/lucene-core-3.6.0.jar" />
+		<pathelement location="${USER_HOME}/.m2/repository/org/jaudiotagger/2.0.3/jaudiotagger-2.0.3.jar" />
+		<pathelement location="${USER_HOME}/.m2/repository/org/apache/httpcomponents/httpclient/4.2/httpclient-4.2.jar" />
+		<pathelement location="${USER_HOME}/.m2/repository/org/apache/httpcomponents/httpcore/4.2/httpcore-4.2.jar" />
+		<pathelement location="${USER_HOME}/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" />
+		<pathelement location="${USER_HOME}/.m2/repository/commons-codec/commons-codec/1.6/commons-codec-1.6.jar" />
+		<pathelement location="${USER_HOME}/.m2/repository/org/eclipse/swt/org.eclipse.swt.gtk.linux.x86/3.7.2/org.eclipse.swt.gtk.linux.x86-3.7.2.jar" />
+	</path>
+	<path id="JUnit 4.libraryclasspath">
+		<pathelement location="${ECLIPSE_HOME}/plugins/org.junit_4.8.2.v4_8_2_v20110321-1705/junit.jar" />
+		<pathelement location="${ECLIPSE_HOME}/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar" />
+	</path>
+	<path id="lyfi.classpath">
+		<pathelement location="target/classes" />
+		<pathelement location="target/test-classes" />
+		<path refid="Maven Dependencies.libraryclasspath" />
+		<path refid="JUnit 4.libraryclasspath" />
+		<pathelement location="lib/lyrics-0.0.2-SNAPSHOT.jar" />
+	</path>
+	<path id="run.LyricsFinderCommandLineUITest.classpath">
+		<path refid="lyfi.classpath" />
+		<path refid="Maven Dependencies.libraryclasspath" />
+	</path>
+	<path id="run.LyricsWebSearcherTest.classpath">
+		<path refid="lyfi.classpath" />
+		<path refid="Maven Dependencies.libraryclasspath" />
+	</path>
+	<path id="run.LyricsFinderCommandLineUI.classpath">
+		<path refid="lyfi.classpath" />
+		<path refid="Maven Dependencies.libraryclasspath" />
+	</path>
+	<path id="run.LyricsIndexFinderTest.classpath">
+		<path refid="lyfi.classpath" />
+		<path refid="Maven Dependencies.libraryclasspath" />
+	</path>
+	<path id="run.test.classpath">
+		<path refid="lyfi.classpath" />
+		<path refid="Maven Dependencies.libraryclasspath" />
+	</path>
+	<path id="run.LyricsFinderTest.classpath">
+		<path refid="lyfi.classpath" />
+		<path refid="Maven Dependencies.libraryclasspath" />
+	</path>
+	<path id="run.LyricsFinderSWT_UI.classpath">
+		<path refid="lyfi.classpath" />
+		<path refid="Maven Dependencies.libraryclasspath" />
+	</path>
+	<target name="eclipse-home-set-props-if-set" if="${eclipse.home}">
+		<property name="ECLIPSE_HOME" value="${eclipse.home}" />
+	</target>
+
+	<target name="eclipse-home-set-props-if-not-set" unless="${eclipse.home}">
+		<property name="ECLIPSE_HOME" value="${USER_HOME}/.local/opt/eclipse" />
+	</target>
+	<target name="setProps" depends="eclipse-home-set-props-if-set, eclipse-home-set-props-if-not-set" />
+	<target name="init" depends="setProps">
+		<mkdir dir="target/classes" />
+		<mkdir dir="target/test-classes" />
+		<copy includeemptydirs="false" todir="target/classes">
+			<fileset dir="src">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy includeemptydirs="false" todir="target/test-classes">
+			<fileset dir="test">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="target/classes" />
+		<delete dir="target/test-classes" />
+	</target>
+	<target depends="clean" name="cleanall" />
+	<target depends="build-subprojects,build-project,create_run_jar" name="build">
+		<echo message="${ant.project.name}: ${ant.file}" />
+	</target>
+	<target name="build-subprojects" />
+	<target depends="init" name="build-project">
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" includeantruntime="false" target="${target}">
+			<src path="src" />
+			<classpath refid="lyfi.classpath" />
+		</javac>
+		<javac debug="true" debuglevel="${debuglevel}" destdir="target/test-classes" source="${source}" includeantruntime="false" target="${target}">
+			<src path="test" />
+			<classpath refid="lyfi.classpath" />
+		</javac>
+	</target>
+	<target name="create_run_jar">
+		<jar destfile="export/lyfi_0-5.jar">
+			<manifest>
+				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader" />
+				<attribute name="Rsrc-Main-Class" value="br.lyfi.ui.LyricsFinderCommandLineUI" />
+				<attribute name="Class-Path" value="." />
+				<attribute name="Rsrc-Class-Path" value="./ junit.jar org.hamcrest.core_1.1.0.v20090501071000.jar lyrics-0.0.2-SNAPSHOT.jar commons-cli-1.2.jar lucene-core-3.6.0.jar jaudiotagger-2.0.3.jar httpclient-4.2.jar httpcore-4.2.jar commons-logging-1.1.1.jar commons-codec-1.6.jar" />
+			</manifest>
+			<zipfileset src="jar-in-jar-loader.zip" />
+			<fileset dir="target/classes" />
+			<zipfileset dir="${ECLIPSE_HOME}/plugins/org.junit_4.8.2.v4_8_2_v20110321-1705" includes="junit.jar" />
+			<zipfileset dir="${ECLIPSE_HOME}/plugins" includes="org.hamcrest.core_1.1.0.v20090501071000.jar" />
+			<zipfileset dir="${USER_HOME}/.workspaces/default/lyfi/lib" includes="lyrics-0.0.2-SNAPSHOT.jar" />
+			<zipfileset dir="${USER_HOME}/.m2/repository/commons-cli/commons-cli/1.2" includes="commons-cli-1.2.jar" />
+			<zipfileset dir="${USER_HOME}/.m2/repository/org/apache/lucene/lucene-core/3.6.0" includes="lucene-core-3.6.0.jar" />
+			<zipfileset dir="${USER_HOME}/.m2/repository/org/jaudiotagger/2.0.3" includes="jaudiotagger-2.0.3.jar" />
+			<zipfileset dir="${USER_HOME}/.m2/repository/org/apache/httpcomponents/httpclient/4.2" includes="httpclient-4.2.jar" />
+			<zipfileset dir="${USER_HOME}/.m2/repository/org/apache/httpcomponents/httpcore/4.2" includes="httpcore-4.2.jar" />
+			<zipfileset dir="${USER_HOME}/.m2/repository/commons-logging/commons-logging/1.1.1" includes="commons-logging-1.1.1.jar" />
+			<zipfileset dir="${USER_HOME}/.m2/repository/commons-codec/commons-codec/1.6" includes="commons-codec-1.6.jar" />
+		</jar>
+	</target>
+	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects" />
+	<target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+		<copy todir="${ant.library.dir}">
+			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar" />
+		</copy>
+		<unzip dest="${ant.library.dir}">
+			<patternset includes="jdtCompilerAdapter.jar" />
+			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar" />
+		</unzip>
+	</target>
+	<target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+		<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter" />
+		<antcall target="build" />
+	</target>
+	<target name="LyricsFinderCommandLineUITest">
+		<mkdir dir="${junit.output.dir}" />
+		<junit fork="yes" printsummary="withOutAndErr">
+			<formatter type="xml" />
+			<test name="br.lyfi.ui.LyricsFinderCommandLineUITest" todir="${junit.output.dir}" />
+			<classpath refid="run.LyricsFinderCommandLineUITest.classpath" />
+		</junit>
+	</target>
+	<target name="LyricsWebSearcherTest">
+		<mkdir dir="${junit.output.dir}" />
+		<junit fork="yes" printsummary="withOutAndErr">
+			<formatter type="xml" />
+			<test name="br.lyfi.preindexing.LyricsWebSearcherTest" todir="${junit.output.dir}" />
+			<classpath refid="run.LyricsWebSearcherTest.classpath" />
+		</junit>
+	</target>
+	<target name="LyricsFinderCommandLineUI">
+		<java classname="br.lyfi.ui.LyricsFinderCommandLineUI" failonerror="true" fork="yes">
+			<classpath refid="run.LyricsFinderCommandLineUI.classpath" />
+		</java>
+	</target>
+	<target name="LyricsIndexFinderTest">
+		<mkdir dir="${junit.output.dir}" />
+		<junit fork="yes" printsummary="withOutAndErr">
+			<formatter type="xml" />
+			<test name="br.lyfi.postindexing.LyricsIndexFinderTest" todir="${junit.output.dir}" />
+			<classpath refid="run.LyricsIndexFinderTest.classpath" />
+		</junit>
+	</target>
+	<target name="test">
+		<mkdir dir="${junit.output.dir}" />
+		<junit fork="yes" printsummary="withOutAndErr">
+			<formatter type="xml" />
+			<test name="br.lyfi.LyricsFinderTest" todir="${junit.output.dir}" />
+			<test name="br.lyfi.postindexing.LyricsIndexFinderTest" todir="${junit.output.dir}" />
+			<test name="br.lyfi.preindexing.LyricsWebSearcherTest" todir="${junit.output.dir}" />
+			<test name="br.lyfi.ui.LyricsFinderCommandLineUITest" todir="${junit.output.dir}" />
+			<classpath refid="run.test.classpath" />
+		</junit>
+	</target>
+	<target name="LyricsFinderTest">
+		<mkdir dir="${junit.output.dir}" />
+		<junit fork="yes" printsummary="withOutAndErr">
+			<formatter type="xml" />
+			<test name="br.lyfi.LyricsFinderTest" todir="${junit.output.dir}" />
+			<classpath refid="run.LyricsFinderTest.classpath" />
+		</junit>
+	</target>
+	<target name="LyricsFinderSWT_UI">
+		<java classname="br.lyfi.ui.LyricsFinderSWT_UI" failonerror="true" fork="yes">
+			<classpath refid="run.LyricsFinderSWT_UI.classpath" />
+		</java>
+	</target>
+	<target name="junitreport">
+		<junitreport todir="${junit.output.dir}">
+			<fileset dir="${junit.output.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${junit.output.dir}" />
+		</junitreport>
+	</target>
 </project>

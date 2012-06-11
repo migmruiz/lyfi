@@ -31,11 +31,11 @@ public class LyricsFinderSWT_UI extends Composite {
 	Text _lyricsField;
 	Text _artistField;
 
+	List<Text> _fields; // all fields
+	
 	Button _dataDirBrowse;
 
 	DirectoryDialog _dataDirFileDialog;
-
-	List<Text> fields; // all fields
 
 	Button _findButton;
 	Button _clearButton;
@@ -46,13 +46,13 @@ public class LyricsFinderSWT_UI extends Composite {
 
 	public LyricsFinderSWT_UI(Shell shell, int style) {
 		super(shell, style);
-		fields = new ArrayList<Text>();
+		_fields = new ArrayList<Text>();
 		_dataDirFileDialog = new DirectoryDialog(shell, SWT.OPEN);
 		createGui();
 	}
 
 	protected void clearFields() {
-		for (Text field : fields) {
+		for (Text field : _fields) {
 			field.setText("");
 		}
 	}
@@ -69,7 +69,7 @@ public class LyricsFinderSWT_UI extends Composite {
 			text.setToolTipText(tip);
 		}
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fields.add(text);
+		_fields.add(text);
 		return text;
 	}
 
@@ -180,7 +180,7 @@ public class LyricsFinderSWT_UI extends Composite {
 		return valid;
 	}
 
-	private void doFind(String dataDirPath, String lyricsExp, String artist) {
+	protected void doFind(String dataDirPath, String lyricsExp, String artist) {
 
 		// TODO Use given artist
 		LyricsFinder lyfi = new LyricsFinder(dataDirPath);

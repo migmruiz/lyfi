@@ -44,5 +44,5 @@ the first three are Apache Software Foundation's projects.
 
 ## Build
 
-    ../lyfi$ ant 
-
+    ../lyfi$ mvn compile
+    ../lyfi$ ant

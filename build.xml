@@ -79,15 +79,17 @@
 		<delete file="export/lyfi_0-5.jar"/>
 	</target>
 	<target depends="clean" name="cleanall" />
-	<target depends="build-subprojects,build-project,create_run_jar" name="build" />
+	<target depends="build-subprojects,build-project,create_run_jar" name="build">
+		<echo message="${ant.project.name}: ${ant.file}" />
+	</target>
 	<target name="build-subprojects" />
 	<target depends="init" name="build-project">
 		<echo message="${ant.project.name}: ${ant.file}" />
-		<javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" target="${target}">
+		<javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" includeantruntime="false" target="${target}">
 			<src path="src" />
 			<classpath refid="lyfi.classpath" />
 		</javac>
-		<javac debug="true" debuglevel="${debuglevel}" destdir="target/test-classes" source="${source}" target="${target}">
+		<javac debug="true" debuglevel="${debuglevel}" destdir="target/test-classes" source="${source}" includeantruntime="false" target="${target}">
 			<src path="test" />
 			<classpath refid="lyfi.classpath" />
 		</javac>

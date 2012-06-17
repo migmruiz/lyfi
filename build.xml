@@ -21,7 +21,7 @@
 		<pathelement location="${MAVEN_LOCAL_REPO}/org/apache/httpcomponents/httpcore/4.2/httpcore-4.2.jar" />
 		<pathelement location="${MAVEN_LOCAL_REPO}/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" />
 		<pathelement location="${MAVEN_LOCAL_REPO}/commons-codec/commons-codec/1.6/commons-codec-1.6.jar" />
-		<pathelement location="${MAVEN_LOCAL_REPO}/org/eclipse/swt/org.eclipse.swt.gtk.linux.x86/3.7.2/org.eclipse.swt.gtk.linux.x86-3.7.2.jar" />
+		<pathelement location="${MAVEN_LOCAL_REPO}/org/eclipse/swt/${swt.artifact}/3.7.2/${swt.artifact}-3.7.2.jar" />
 		<pathelement location="${MAVEN_LOCAL_REPO}/junit/junit/4.10/junit-4.10.jar" />
 		<pathelement location="${MAVEN_LOCAL_REPO}/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" />
 	</path>

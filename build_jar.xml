@@ -6,13 +6,22 @@
 	<property environment="env" />
 	<property name="USER_HOME" value="${user.home}" />
 	<property name="MAVEN_LOCAL_REPO" value="${USER_HOME}/.m2/repository" />
+	<condition property="swt.artifact" value="org.eclipse.swt.win32.win32.x86">
+		<os family="windows" />
+	</condition>
+	<condition property="swt.artifact" value="org.eclipse.swt.carbon.macosx">
+		<os name="mac os x" />
+	</condition>
+	<condition property="swt.artifact" value="org.eclipse.swt.gtk.linux.x86">
+		<os name="linux" />
+	</condition>
 	<target name="create_run_jar">
 		<jar destfile="export/lyfi_0-5.jar">
 			<manifest>
 				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader" />
 				<attribute name="Rsrc-Main-Class" value="br.lyfi.ui.LyricsFinderCommandLineUI" />
 				<attribute name="Class-Path" value="." />
-				<attribute name="Rsrc-Class-Path" value="./ lyrics-0.0.2-SNAPSHOT.jar commons-cli-1.2.jar lucene-core-3.6.0.jar jaudiotagger-2.0.3.jar httpclient-4.2.jar httpcore-4.2.jar commons-logging-1.1.1.jar commons-codec-1.6.jar org.eclipse.swt.gtk.linux.x86-3.7.2.jar junit-4.10.jar hamcrest-core-1.1.jar" />
+				<attribute name="Rsrc-Class-Path" value="./ lyrics-0.0.2-SNAPSHOT.jar commons-cli-1.2.jar lucene-core-3.6.0.jar jaudiotagger-2.0.3.jar httpclient-4.2.jar httpcore-4.2.jar commons-logging-1.1.1.jar commons-codec-1.6.jar ${swt.artifact}-3.7.2.jar junit-4.10.jar hamcrest-core-1.1.jar" />
 			</manifest>
 			<zipfileset src="jar-in-jar-loader.zip" />
 			<fileset dir="target/classes" />
@@ -24,7 +33,7 @@
 			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/apache/httpcomponents/httpcore/4.2" includes="httpcore-4.2.jar" />
 			<zipfileset dir="${MAVEN_LOCAL_REPO}/commons-logging/commons-logging/1.1.1" includes="commons-logging-1.1.1.jar" />
 			<zipfileset dir="${MAVEN_LOCAL_REPO}/commons-codec/commons-codec/1.6" includes="commons-codec-1.6.jar" />
-			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/eclipse/swt/org.eclipse.swt.gtk.linux.x86/3.7.2" includes="org.eclipse.swt.gtk.linux.x86-3.7.2.jar" />
+			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/eclipse/swt/${swt.artifact}/3.7.2" includes="${swt.artifact}-3.7.2.jar" />
 			<zipfileset dir="${MAVEN_LOCAL_REPO}/junit/junit/4.10" includes="junit-4.10.jar" />
 			<zipfileset dir="${MAVEN_LOCAL_REPO}/org/hamcrest/hamcrest-core/1.1" includes="hamcrest-core-1.1.jar" />
 		</jar>

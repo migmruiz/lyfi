@@ -39,8 +39,8 @@ public class LyricsIndexFinderTest {
 	public void setUp() throws Exception {
 		System.out.println(this.getClass().getSimpleName()
 				+ " test: setting up...");
-		indexDirPath = "resources/indexdir";
-		dataDirPath = "resources/datadir";
+		indexDirPath = "resources/test/indexdir";
+		dataDirPath = "resources/test/datadir";
 		IndexMaker indexMaker = new IndexMaker(indexDirPath, dataDirPath);
 		indexMaker.createIndexWriter();
 		indexWriter = indexMaker.getIndexWriter();

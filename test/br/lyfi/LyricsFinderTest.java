@@ -28,9 +28,9 @@ public class LyricsFinderTest {
 	public void setUp() throws Exception {
 		System.out.println(this.getClass().getSimpleName()
 				+ " test: setting up...");
-		testIndexDirPath = "resources/indexdir";
-		testDataDirPath = "resources/datadir";
-		lyfi = new LyricsFinder(testIndexDirPath, testDataDirPath);
+		testIndexDirPath = "resources/test/indexdir";
+		testDataDirPath = "resources/test/datadir";
+		lyfi = new LyricsFinder(testIndexDirPath, testDataDirPath, true);
 		numberOfLyricsExp = 6;
 		lyricsExp = new String[numberOfLyricsExp];
 		lyricsExp[0] = "one";

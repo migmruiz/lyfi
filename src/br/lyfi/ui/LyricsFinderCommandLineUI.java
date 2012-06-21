@@ -90,8 +90,8 @@ public class LyricsFinderCommandLineUI {
 								+ " like a charm", options,
 						System.getProperty("line.separator")
 								+ "usage example: lyfi"
-								+ " -d ../resources/datadir/"
-								+ " -i ../resources/indexdir/"
+								+ " -d ../resources/test/datadir/"
+								+ " -i ../resources/test/indexdir/"
 								+ " -f \"better\"");
 	}
 

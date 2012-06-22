@@ -34,11 +34,11 @@ public class LyricsFinderCommandLineUI {
 						+ " the search will be performed (optional, defaults to "
 						+ System.getProperty("user.dir") + ")"));
 		options.addOption(new Option("i", "index-dir", true, "directory where "
-				+ LyricsFinder.simpleName
+				+ LyricsFinder.SIMPLE_NAME
 				+ " will store index files (optional, defalts to "
 				+ System.getProperty("java.io.tmpdir")
 				+ System.getProperty("file.separator")
-				+ LyricsFinder.simpleName + "_index" + ")"));
+				+ LyricsFinder.SIMPLE_NAME + "_index" + ")"));
 		// WISHLIST implement playback capabilities
 		CommandLineParser parser = new GnuParser();
 		CommandLine cmd = null;
@@ -76,7 +76,7 @@ public class LyricsFinderCommandLineUI {
 	private static void printUsage(Options options) {
 		System.out.println(System.getProperty("line.separator")
 				+ System.getProperty("line.separator") + "\t\t"
-				+ LyricsFinder.simpleName + " has been brought to life by"
+				+ LyricsFinder.SIMPLE_NAME + " has been brought to life by"
 				+ System.getProperty("line.separator") + "\t\t"
 				+ "Miguel Mendes Ruiz (migmruiz@gmail.com),"
 				+ System.getProperty("line.separator") + "\t\t"
@@ -84,7 +84,7 @@ public class LyricsFinderCommandLineUI {
 		HelpFormatter formatter = new HelpFormatter();
 		formatter
 				.printHelp(
-						LyricsFinder.simpleName,
+						LyricsFinder.SIMPLE_NAME,
 						"Here are the options for you to find your music by partial lyrics \n"
 								+ "the first run will take some time, but then it will work\n"
 								+ " like a charm", options,

@@ -18,10 +18,10 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<!--  <repository>
+		<!-- <repository>
 			<id>eclipse-nexus</id>
 			<name>Nexus repository hosted at Eclipse for Maven (this repository is in 'testing' status)</name>
-			<url>http://maven.eclipse.org/nexus/content/repositories/testing/org/eclipse/swt/</url>
+			<url>http://maven.eclipse.org/nexus/content/repositories/testing/</url>
 			<layout>default</layout>
 		</repository> -->
 		<repository>
@@ -64,6 +64,12 @@
 			<artifactId>junit</artifactId>
 			<version>4.10</version>
 		</dependency>
+		<!-- <dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>jface</artifactId>
+			<!- <version>3.3.0-I20070606-0010</version> ->
+			<version>3.7.2</version>
+		</dependency> -->
 	</dependencies>
 
 	<profiles>

@@ -7,6 +7,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -195,9 +196,12 @@ public class LyricsFinderSWT_UI extends Composite {
 	public static void main(String[] args) {
 		final Display display = new Display();
 		final Shell shell = new Shell(display);
-
-		shell.setText(LyricsFinder.name);
+		
+		Image icon = new Image(display, LyricsFinder.IMG_APP_ICON_PATH);
+		
+		shell.setText(LyricsFinder.NAME);
 		shell.setLayout(new FillLayout());
+		shell.setImage(icon);
 
 		@SuppressWarnings("unused")
 		LyricsFinderSWT_UI basic = new LyricsFinderSWT_UI(shell);

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   id="Camada_1"
+   xml:space="preserve"><metadata
+   id="metadata43"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs41" />
+
+
+
+
+
+<path
+   d="M 510,460.93289 C 510,488.0302 488.0302,510 460.93289,510 H 51.067113 C 23.9698,510 2,488.0302 2,460.93289 V 51.067113 C 2,23.9698 23.9698,2 51.067113,2 H 460.93289 C 488.0302,2 510,23.9698 510,51.067113 V 460.93289 z"
+   id="path25"
+   style="fill:#4b7b80" />
+<g
+   transform="matrix(4.0889261,0,0,4.0889261,-6.1778521,-5.69127)"
+   id="g27">
+	<circle
+   cx="65.994003"
+   cy="64"
+   r="46.672001"
+   id="circle29"
+   style="fill:#bf7e87;stroke:#ffffff;stroke-miterlimit:10" />
+	<circle
+   cx="65.994003"
+   cy="64"
+   r="28.215"
+   id="circle31"
+   style="fill:#f2e5bd;stroke:#ffffff;stroke-miterlimit:10" />
+	<circle
+   cx="73.108002"
+   cy="55.373001"
+   r="17.091"
+   id="circle33"
+   style="fill:#6e4773;stroke:#ffffff;stroke-miterlimit:10" />
+</g>
+
+
+</svg>

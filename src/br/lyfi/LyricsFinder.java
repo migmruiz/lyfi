@@ -27,9 +27,12 @@ public class LyricsFinder {
 
 	// Application constants
 
-	public final static String name = "Lyrics Finder";
-	public final static String simpleName = "lyfi";
+	public final static String NAME = "Lyrics Finder";
+	public final static String SIMPLE_NAME = "lyfi";
 
+	public final static String IMG_APP_ICON_PATH = "resources/icon_128x128.png";
+	
+	
 	// a path to directory where Lucene will store index files
 	private String indexDirPath;
 	// a path to directory which contains data files that need to be indexed
@@ -58,7 +61,7 @@ public class LyricsFinder {
 	public LyricsFinder(String dataDirPath) {
 		this(System.getProperty("java.io.tmpdir")
 				+ System.getProperty("file.separator")
-				+ LyricsFinder.simpleName + "_index", dataDirPath);
+				+ LyricsFinder.SIMPLE_NAME + "_index", dataDirPath);
 	}
 
 	/**

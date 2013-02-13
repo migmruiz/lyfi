@@ -33,7 +33,7 @@ public class LyricsFinderCommandLineUITest {
 
 	@Test
 	public void test() {
-		String[] args = new String[] { "-d", testDataDirPath, "-i",
+		final String[] args = new String[] { "-d", testDataDirPath, "-i",
 				testIndexDirPath, "-f", lyricsExp[2] };
 		assertNotNull(args);
 		LyricsFinderCommandLineUI.main(args);

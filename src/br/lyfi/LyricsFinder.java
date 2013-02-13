@@ -3,6 +3,9 @@ package br.lyfi;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.apache.lucene.document.Document;
@@ -186,8 +189,11 @@ public class LyricsFinder {
 	 * @throws IOException
 	 */
 	private boolean isIndexCompatibleWithData() throws IOException {
-		File dataDir = new File(dataDirPath);
-		return indexWriter.numDocs() == dataDir.list().length;
+		final Path dataDir = Paths.get(dataDirPath);
+		if (!Files.exists(dataDir)) {
+			Files.createDirectories(dataDir);
+		}
+		return indexWriter.numDocs() == dataDir.toFile().list().length;
 	}
 
 	/**

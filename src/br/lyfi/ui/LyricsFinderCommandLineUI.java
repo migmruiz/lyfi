@@ -2,10 +2,10 @@ package br.lyfi.ui;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.ParseException;
 
 import br.lyfi.LyricsFinder;
@@ -22,7 +22,7 @@ public class LyricsFinderCommandLineUI {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Options options = new Options();
+		final Options options = new Options();
 
 		options.addOption(new Option("f", "find", true,
 				"partial lyrics expression to use on query (required)"));
@@ -40,31 +40,29 @@ public class LyricsFinderCommandLineUI {
 				+ System.getProperty("file.separator")
 				+ LyricsFinder.SIMPLE_NAME + "_index" + ")"));
 		// WISHLIST implement playback capabilities
-		CommandLineParser parser = new GnuParser();
-		CommandLine cmd = null;
+		final CommandLineParser parser = new GnuParser();
 		try {
-			cmd = parser.parse(options, args);
+			final CommandLine cmd = parser.parse(options, args);
+			if (cmd.hasOption("f")) {
+				final LyricsFinder lyfi;
+				if (cmd.hasOption("d")) {
+					if (cmd.hasOption("i")) {
+						lyfi = new LyricsFinder(cmd.getOptionValue("i"),
+								cmd.getOptionValue("d"));
+					} else {
+						lyfi = new LyricsFinder(cmd.getOptionValue("d"));
+					}
+				} else {
+					lyfi = new LyricsFinder();
+				}
+				final String[] result = lyfi.find(cmd.getOptionValue("f"));
+				System.out.println(result[1]);
+			} else {
+				printUsage(options);
+			}
 		} catch (ParseException e) {
 			printUsage(options);
 			throw new RuntimeException(e);
-		}
-
-		if (cmd.hasOption("f")) {
-			LyricsFinder lyfi;
-			if (cmd.hasOption("d")) {
-				if (cmd.hasOption("i")) {
-					lyfi = new LyricsFinder(cmd.getOptionValue("i"),
-							cmd.getOptionValue("d"));
-				} else {
-					lyfi = new LyricsFinder(cmd.getOptionValue("d"));
-				}
-			} else {
-				lyfi = new LyricsFinder();
-			}
-			String[] result = lyfi.find(cmd.getOptionValue("f"));
-			System.out.println(result[1]);
-		} else {
-			printUsage(options);
 		}
 	}
 
@@ -73,7 +71,7 @@ public class LyricsFinderCommandLineUI {
 	 * 
 	 * @param options
 	 */
-	private static void printUsage(Options options) {
+	private static void printUsage(final Options options) {
 		System.out.println(System.getProperty("line.separator")
 				+ System.getProperty("line.separator") + "\t\t"
 				+ LyricsFinder.SIMPLE_NAME + " has been brought to life by"
@@ -81,7 +79,7 @@ public class LyricsFinderCommandLineUI {
 				+ "Miguel Mendes Ruiz (migmruiz@gmail.com),"
 				+ System.getProperty("line.separator") + "\t\t"
 				+ "please enjoy :)");
-		HelpFormatter formatter = new HelpFormatter();
+		final HelpFormatter formatter = new HelpFormatter();
 		formatter
 				.printHelp(
 						LyricsFinder.SIMPLE_NAME,

@@ -35,10 +35,10 @@ public class IndexMaker {
 	private IndexWriter indexWriter;
 
 	/* Location of directory where index files are stored */
-	private String indexDirectory;
+	private final String indexDirectory;
 
 	/* Location of the data directory */
-	private String dataDirectory;
+	private final String dataDirectory;
 
 	/**
 	 * Constructor for the IndexMaker
@@ -96,8 +96,8 @@ public class IndexMaker {
 		indexWriter.deleteAll();
 		indexWriter.commit();
 
-		File[] files = getFilesToBeIndexed();
-		for (File file : files) {
+		final File[] files = getFilesToBeIndexed();
+		for (final File file : files) {
 
 			/* Step 1. Prepare the data for indexing. Extract the data. */
 
@@ -107,8 +107,8 @@ public class IndexMaker {
 
 			if (file.isFile()) {
 				try {
-					AudioFile audioFile = AudioFileIO.read(file);
-					Tag tag = audioFile.getTag();
+					final AudioFile audioFile = AudioFileIO.read(file);
+					final Tag tag = audioFile.getTag();
 					if (tag == null) {
 						System.out.println("warning: The file " + file
 								+ " doesn't have any tag");
@@ -120,7 +120,7 @@ public class IndexMaker {
 						// lyrics already in the mp3 file, use it!
 					} else {
 						// if not we want to look for the lyrics in the web
-						LyricsWebSearcher webSearcher = new LyricsWebSearcher();
+						final LyricsWebSearcher webSearcher = new LyricsWebSearcher();
 						lyrics = webSearcher.fetchLyrics(artist, title);
 					}
 
@@ -129,7 +129,7 @@ public class IndexMaker {
 				}
 			}
 
-			String mp3file = file.getAbsolutePath();
+			final String mp3file = file.getAbsolutePath();
 
 			/* Step 2. Wrap the data in the Fields and add them to a Document */
 
@@ -139,20 +139,20 @@ public class IndexMaker {
 			 * their values in the index
 			 */
 
-			Field artistField = new Field("artist", artist, Field.Store.YES,
+			final Field artistField = new Field("artist", artist, Field.Store.YES,
 					Field.Index.NOT_ANALYZED);
 
-			Field titleField = new Field("title", title, Field.Store.YES,
+			final Field titleField = new Field("title", title, Field.Store.YES,
 					Field.Index.ANALYZED);
 
-			Field lyricsField = new Field("lyrics", lyrics, Field.Store.YES,
+			final Field lyricsField = new Field("lyrics", lyrics, Field.Store.YES,
 					Field.Index.ANALYZED);
 
-			Field mp3FileField = new Field("mp3FileDoc", mp3file,
+			final Field mp3FileField = new Field("mp3FileDoc", mp3file,
 					Field.Store.YES, Field.Index.NO);
 
 			// Add these fields to a Lucene Document
-			Document doc = new Document();
+			final Document doc = new Document();
 			doc.add(artistField);
 			doc.add(titleField);
 			doc.add(lyricsField);
@@ -186,11 +186,10 @@ public class IndexMaker {
 	 */
 	private File[] getFilesToBeIndexed() {
 		// TODO lists dataDirectory's children list of files
-		File dataDir = new File(dataDirectory);
+		final File dataDir = new File(dataDirectory);
 		if (!dataDir.exists()) {
 			throw new RuntimeException(dataDirectory + " does not exist");
 		}
-		File[] files = dataDir.listFiles();
-		return files;
+		return dataDir.listFiles();
 	}
 }

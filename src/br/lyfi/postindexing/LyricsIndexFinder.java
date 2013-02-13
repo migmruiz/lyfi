@@ -2,7 +2,8 @@ package br.lyfi.postindexing;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
@@ -36,7 +37,7 @@ public class LyricsIndexFinder {
 	 * @throws CorruptIndexException
 	 * @throws IOException
 	 */
-	public LyricsIndexFinder(IndexWriter iw) throws CorruptIndexException,
+	public LyricsIndexFinder(final IndexWriter iw) throws CorruptIndexException,
 			IOException {
 		indexReader = IndexReader.open(iw, true);
 		finder = new IndexSearcher(indexReader);
@@ -51,7 +52,7 @@ public class LyricsIndexFinder {
 	 * @throws CorruptIndexException
 	 * @throws IOException
 	 */
-	public LyricsIndexFinder(String indexPath) throws CorruptIndexException,
+	public LyricsIndexFinder(final String indexPath) throws CorruptIndexException,
 			IOException {
 		indexReader = IndexReader.open(FSDirectory.open(new File(indexPath)));
 		finder = new IndexSearcher(indexReader);
@@ -62,21 +63,21 @@ public class LyricsIndexFinder {
 	 * 
 	 * @param lyricsExp
 	 *            the partial lyrics expression
-	 * @return a Vector of Documents with the top 10 hits, each Document
+	 * @return a List of Documents with the top 10 hits, each Document
 	 *         representing a music file, with its associated lyrics,
 	 * @throws IOException
 	 */
-	public Vector<Document> find(String lyricsExp) throws IOException {
+	public List<Document> find(final String lyricsExp) throws IOException {
 
-		int nQuerys = 10;
-		TopDocs topDocs;
-		String[] words = lyricsExp.trim().split(" ");
+		final int nQuerys = 10;
+		final TopDocs topDocs;
+		final String[] words = lyricsExp.trim().split(" ");
 		if (words.length == 1) {
-			Term term = new Term("lyrics", lyricsExp);
-			Query termQuery = new TermQuery(term);
+			final Term term = new Term("lyrics", lyricsExp);
+			final Query termQuery = new TermQuery(term);
 			topDocs = finder.search(termQuery, nQuerys);
 		} else {
-			PhraseQuery query = new PhraseQuery();
+			final PhraseQuery query = new PhraseQuery();
 			query.setSlop(1);
 			for (String word : words) {
 				query.add(new Term("lyrics", word));
@@ -87,9 +88,9 @@ public class LyricsIndexFinder {
 		System.out.println("Total hits " + topDocs.totalHits);
 
 		// Get an array of references to matched documents
-		ScoreDoc[] scoreDosArray = topDocs.scoreDocs;
-		Vector<Document> documents = new Vector<Document>(topDocs.totalHits);
-		for (ScoreDoc scoredoc : scoreDosArray) {
+		final ScoreDoc[] scoreDosArray = topDocs.scoreDocs;
+		final List<Document> documents = new ArrayList<>(topDocs.totalHits);
+		for (final ScoreDoc scoredoc : scoreDosArray) {
 			documents.add(finder.doc(scoredoc.doc));
 		}
 		return documents;

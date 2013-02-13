@@ -32,11 +32,11 @@ public class LyricsFinderSWT_UI extends Composite {
 	Text _lyricsField;
 	Text _artistField;
 
-	List<Text> _fields; // all fields
+	final List<Text> _fields; // all fields
 	
 	Button _dataDirBrowse;
 
-	DirectoryDialog _dataDirFileDialog;
+	final DirectoryDialog _dataDirFileDialog;
 
 	Button _findButton;
 	Button _clearButton;
@@ -93,20 +93,20 @@ public class LyricsFinderSWT_UI extends Composite {
 
 		// create the setup area
 
-		Group entryGroup = new Group(this, SWT.NONE);
+		final Group entryGroup = new Group(this, SWT.NONE);
 		entryGroup.setText("Setup");
 		// use 2 columns, not same width
-		GridLayout entryLayout = new GridLayout(2, false);
+		final GridLayout entryLayout = new GridLayout(2, false);
 		entryGroup.setLayout(entryLayout);
-		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		final GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData.widthHint = 400;
 		entryGroup.setLayoutData(gridData);
 		// make all buttons the same size
-		FillLayout buttonLayout = new FillLayout();
+		final FillLayout buttonLayout = new FillLayout();
 		buttonLayout.marginHeight = 2;
 		buttonLayout.marginWidth = 2;
 		buttonLayout.spacing = 5;
-		Composite browseButton = new Composite(this, SWT.NONE);
+		final Composite browseButton = new Composite(this, SWT.NONE);
 		browseButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false));
 		browseButton.setLayout(buttonLayout);
@@ -127,22 +127,22 @@ public class LyricsFinderSWT_UI extends Composite {
 				});
 
 		// create the input area
+		
+		final Group inputEntryGroup = new Group(this, SWT.NONE);
+		inputEntryGroup.setText("Input Values");
+		inputEntryGroup.setLayout(entryLayout);
+		final GridData inputGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		inputGridData.widthHint = 400;
+		entryGroup.setLayoutData(inputGridData);
 
-		entryGroup = new Group(this, SWT.NONE);
-		entryGroup.setText("Input Values");
-		entryGroup.setLayout(entryLayout);
-		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gridData.widthHint = 400;
-		entryGroup.setLayoutData(gridData);
-
-		_lyricsField = createLabelledText(entryGroup, "Partial lyrics: ", 40,
+		_lyricsField = createLabelledText(inputEntryGroup, "Partial lyrics: ", 40,
 				"Enter the partial lyrics");
-		_artistField = createLabelledText(entryGroup, "Artist: ", 20,
+		_artistField = createLabelledText(inputEntryGroup, "Artist: ", 20,
 				"Enter the artist name, if you remember");
 
 		// create the button area
 
-		Composite buttons = new Composite(this, SWT.NONE);
+		final Composite buttons = new Composite(this, SWT.NONE);
 		buttons.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		// set all buttons the same size
 		buttons.setLayout(buttonLayout);
@@ -184,8 +184,8 @@ public class LyricsFinderSWT_UI extends Composite {
 	protected void doFind(String dataDirPath, String lyricsExp, String artist) {
 
 		// TODO Use given artist
-		LyricsFinder lyfi = new LyricsFinder(dataDirPath);
-		String[] result = lyfi.find(lyricsExp);
+		final LyricsFinder lyfi = new LyricsFinder(dataDirPath);
+		final String[] result = lyfi.find(lyricsExp);
 		// TODO graphical output
 		System.out.println(result[1]);
 	}
@@ -197,14 +197,14 @@ public class LyricsFinderSWT_UI extends Composite {
 		final Display display = new Display();
 		final Shell shell = new Shell(display);
 		
-		Image icon = new Image(display, LyricsFinder.IMG_APP_ICON_PATH);
+		final Image icon = new Image(display, LyricsFinder.IMG_APP_ICON_PATH);
 		
 		shell.setText(LyricsFinder.NAME);
 		shell.setLayout(new FillLayout());
 		shell.setImage(icon);
 
 		@SuppressWarnings("unused")
-		LyricsFinderSWT_UI basic = new LyricsFinderSWT_UI(shell);
+		final LyricsFinderSWT_UI basic = new LyricsFinderSWT_UI(shell);
 
 		shell.pack();
 		shell.open();

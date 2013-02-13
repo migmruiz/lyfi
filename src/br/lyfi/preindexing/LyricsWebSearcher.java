@@ -1,6 +1,8 @@
 package br.lyfi.preindexing;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import lyrics.crawler.Crawler;
@@ -17,13 +19,13 @@ import lyrics.crawler.webClient.DownloadException;
  * 
  */
 public class LyricsWebSearcher {
-	private Vector<Crawler> crawlers;
+	private List<Crawler> crawlers;
 
 	/**
 	 * Constructor for a new lyrics web searcher
 	 */
 	public LyricsWebSearcher() {
-		crawlers = new Vector<Crawler>();
+		crawlers = Collections.synchronizedList(new ArrayList<Crawler>());
 		crawlers.add(new LyricsWikiaCrawler()); 
 		crawlers.add(new MetroLyricsCrawler());
 		crawlers.add(new SongLyricsCrawler());
@@ -39,10 +41,10 @@ public class LyricsWebSearcher {
 	 *            Song's title
 	 * @return Song's lyrics
 	 */
-	public String fetchLyrics(String artist, String title) {
+	public String fetchLyrics(final String artist, final String title) {
 		String lyrics = "";
 
-		for (Crawler crawler : crawlers) {
+		for (final Crawler crawler : crawlers) {
 			try {
 				lyrics = crawler.getLyrics(artist, title);
 		

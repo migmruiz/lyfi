@@ -3,8 +3,7 @@ package br.lyfi;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.NoSuchElementException;
-import java.util.Vector;
+import java.util.List;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
@@ -34,11 +33,11 @@ public class LyricsFinder {
 			+ System.getProperty("file.separator") + "icon_128x128.png";
 
 	// a path to directory where Lucene will store index files
-	private String indexDirPath;
+	private final String indexDirPath;
 	// a path to directory which contains data files that need to be indexed
-	private String dataDirPath;
+	private final String dataDirPath;
 	// whether or not forces a new indexing process
-	private boolean forceIndex;
+	private final boolean forceIndex;
 
 	private IndexWriter indexWriter;
 	private LyricsIndexFinder finder;
@@ -58,7 +57,7 @@ public class LyricsFinder {
 	 * @param dataDirPath
 	 *            the path to the data directory, data directory must exist
 	 */
-	public LyricsFinder(String dataDirPath) {
+	public LyricsFinder(final String dataDirPath) {
 		this(System.getProperty("java.io.tmpdir")
 				+ System.getProperty("file.separator")
 				+ LyricsFinder.SIMPLE_NAME + "_index", dataDirPath);
@@ -72,7 +71,7 @@ public class LyricsFinder {
 	 * @param dataDirPath
 	 *            the path to the data directory, data directory must exist
 	 */
-	public LyricsFinder(String indexDirPath, String dataDirPath) {
+	public LyricsFinder(final String indexDirPath, final String dataDirPath) {
 		this(indexDirPath, dataDirPath, false);
 	}
 
@@ -87,8 +86,8 @@ public class LyricsFinder {
 	 *            true if it is intended to force index files again, defaults to
 	 *            false
 	 */
-	public LyricsFinder(String indexDirPath, String dataDirPath,
-			boolean forceIndex) {
+	public LyricsFinder(final String indexDirPath, final String dataDirPath,
+			final boolean forceIndex) {
 		this.indexDirPath = indexDirPath;
 		this.dataDirPath = dataDirPath;
 		this.forceIndex = forceIndex;
@@ -127,19 +126,19 @@ public class LyricsFinder {
 	 *         to the first, artist - title top results,artist - title and
 	 *         lyrics of top results}
 	 */
-	public String[] find(String lyricsExp) {
+	public String[] find(final String lyricsExp) {
 
-		Vector<Document> documents;
+		final List<Document> documents;
 		try {
 			documents = finder.find(lyricsExp);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 
-		String pathToFirst;
+		final String pathToFirst;
 		String output = "";
 		String fullOutput = "";
-		for (Document doc : documents) {
+		for (final Document doc : documents) {
 			output = output + "Song: "
 					+ doc.getFieldable("artist").stringValue() + " - "
 					+ doc.getFieldable("title").stringValue()
@@ -150,10 +149,10 @@ public class LyricsFinder {
 			fullOutput = "Lyrics: " + doc.getFieldable("lyrics").stringValue()
 					+ System.getProperty("line.separator") + output;
 		}
-		try {
-			pathToFirst = documents.firstElement().getFieldable("mp3FileDoc")
+		if (!documents.isEmpty()) {
+			pathToFirst = documents.get(0).getFieldable("mp3FileDoc")
 					.stringValue();
-		} catch (NoSuchElementException e) {
+		} else {
 			pathToFirst = "";
 		}
 
@@ -165,7 +164,7 @@ public class LyricsFinder {
 	 * private indexWriter too
 	 */
 	private void createLuceneIndex() {
-		IndexMaker indexMaker = new IndexMaker(indexDirPath, dataDirPath);
+		final IndexMaker indexMaker = new IndexMaker(indexDirPath, dataDirPath);
 		indexMaker.createIndexWriter();
 		indexWriter = indexMaker.getIndexWriter();
 		try {

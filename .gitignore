@@ -2,3 +2,8 @@ target/
 resources/test/datadir/
 resources/test/indexdir/
 export/
+target/
+.project
+.classpath
+.settings/
+*.class

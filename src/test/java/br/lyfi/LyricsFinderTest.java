@@ -3,7 +3,9 @@ package br.lyfi;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,8 +30,8 @@ public class LyricsFinderTest {
 	public void setUp() throws Exception {
 		System.out.println(this.getClass().getSimpleName()
 				+ " test: setting up...");
-		testIndexDirPath = "resources/test/indexdir";
-		testDataDirPath = "resources/test/datadir";
+		testIndexDirPath = "src/test/resources/test/indexdir";
+		testDataDirPath = "src/test/resources/test/datadir";
 		lyfi = new LyricsFinder(testIndexDirPath, testDataDirPath, true);
 		numberOfLyricsExp = 6;
 		lyricsExp = new String[numberOfLyricsExp];
@@ -62,5 +64,10 @@ public class LyricsFinderTest {
 			System.out.println(result[1]);
 
 		}
+	}
+	
+	@After
+	public void close() throws IOException {
+		lyfi.close();
 	}
 }

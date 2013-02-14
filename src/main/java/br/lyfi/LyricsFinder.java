@@ -1,6 +1,6 @@
 package br.lyfi;
 
-import java.io.File;
+import java.io.Closeable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,8 +12,6 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexNotFoundException;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
 
 import br.lyfi.indexing.IndexMaker;
 import br.lyfi.postindexing.LyricsIndexFinder;
@@ -25,7 +23,7 @@ import br.lyfi.postindexing.LyricsIndexFinder;
  * @author migmruiz
  * 
  */
-public class LyricsFinder {
+public class LyricsFinder implements Closeable {
 
 	// Application constants
 
@@ -97,21 +95,6 @@ public class LyricsFinder {
 
 		createLuceneIndex();
 		createIndexFinder();
-
-		// close the indexWriter
-		try (Directory dir = FSDirectory.open(new File(indexDirPath))){
-			try {
-				if (IndexWriter.isLocked(dir)) {
-					IndexWriter.unlock(dir);
-				}
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		} catch (CorruptIndexException e) {
-			throw new RuntimeException("Index is corrupted", e);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	/**
@@ -163,18 +146,21 @@ public class LyricsFinder {
 	 * private indexWriter too
 	 */
 	private void createLuceneIndex() {
-		final IndexMaker indexMaker = new IndexMaker(indexDirPath, dataDirPath);
-		indexMaker.createIndexWriter();
-		indexWriter = indexMaker.getIndexWriter();
-		try {
-			if (!isIndexCompatibleWithData() || forceIndex) {
-				// Index data
-				indexMaker.indexData();
+		try (final IndexMaker indexMaker = new IndexMaker(indexDirPath, dataDirPath)) {
+			indexMaker.createIndexWriter();
+			indexWriter = indexMaker.getIndexWriter();
+			try {
+				if (!isIndexCompatibleWithData() || forceIndex) {
+					// Index data
+					indexMaker.indexData();
+				}
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException("File not found", e);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
 			}
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException("File not found", e);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		} catch (IOException ioe) {
+			throw new RuntimeException(ioe);
 		}
 	}
 
@@ -206,5 +192,10 @@ public class LyricsFinder {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override public void close() throws IOException {
+		indexWriter.commit();
+		indexWriter.close();
 	}
 }

@@ -1,16 +1,15 @@
 package br.lyfi.postindexing;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import br.lyfi.indexing.IndexMaker;
@@ -25,28 +24,28 @@ import br.lyfi.indexing.IndexMaker;
  */
 public class LyricsIndexFinderTest {
 
-	private String indexDirPath;
-	private String dataDirPath;
-	private IndexWriter indexWriter;
-	private String[] lyricsExp;
-	private int numberOfLyricsExp;
-	private LyricsIndexFinder lyinfiIW, lyinfiPath;
+	private static String indexDirPath;
+	private static String dataDirPath;
+	private static IndexWriter indexWriter;
+	private static String[] lyricsExp;
+	private static int numberOfLyricsExp;
 
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@Before
-	public void setUp() throws Exception {
-		System.out.println(this.getClass().getSimpleName()
+	@BeforeClass
+	public static void setUp() throws Exception {
+		System.out.println(LyricsIndexFinderTest.class.getSimpleName()
 				+ " test: setting up...");
-		indexDirPath = "resources/test/indexdir";
-		dataDirPath = "resources/test/datadir";
-		IndexMaker indexMaker = new IndexMaker(indexDirPath, dataDirPath);
-		indexMaker.createIndexWriter();
-		indexWriter = indexMaker.getIndexWriter();
-		File dataDir = new File(dataDirPath);
-		if (indexWriter.numDocs() < dataDir.list().length) {
-			indexMaker.indexData();
+		indexDirPath = "src/test/resources/test/indexdir";
+		dataDirPath = "src/test/resources/test/datadir";
+		try (IndexMaker indexMaker = new IndexMaker(indexDirPath, dataDirPath)) {
+			indexMaker.createIndexWriter();
+			indexWriter = indexMaker.getIndexWriter();
+			final File dataDir = new File(dataDirPath);
+			if (indexWriter.numDocs() < dataDir.list().length) {
+				indexMaker.indexData();
+			}
 		}
 		numberOfLyricsExp = 6;
 		lyricsExp = new String[numberOfLyricsExp];
@@ -65,14 +64,13 @@ public class LyricsIndexFinderTest {
 	 */
 	@Test
 	public void testLyricsIndexFinderString() {
-		try {
-			lyinfiPath = new LyricsIndexFinder(indexDirPath);
+		try (LyricsIndexFinder lyinfiPath = new LyricsIndexFinder(indexDirPath)) {
+			assertNotNull(lyinfiPath);
 		} catch (CorruptIndexException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
-		assertNotNull(lyinfiPath);
 	}
 
 	/**
@@ -82,14 +80,13 @@ public class LyricsIndexFinderTest {
 	 */
 	@Test
 	public void testLyricsIndexFinderIndexWriter() {
-		try {
-			lyinfiIW = new LyricsIndexFinder(indexWriter);
+		try (LyricsIndexFinder lyinfiIW = new LyricsIndexFinder(indexWriter)) {
+			assertNotNull(lyinfiIW);
 		} catch (CorruptIndexException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
-		assertNotNull(lyinfiIW);
 	}
 
 	/**
@@ -101,55 +98,55 @@ public class LyricsIndexFinderTest {
 	public void testFind_Benchmark() {
 		long time = 0l;
 		// String path case
-		try {
-			time = System.nanoTime();
-			lyinfiPath = new LyricsIndexFinder(indexDirPath);
-			time = System.nanoTime() - time;
+		time = System.nanoTime();
+		try (LyricsIndexFinder lyinfiPath = new LyricsIndexFinder(indexDirPath)) {
+
+			for (int i = 0; i < numberOfLyricsExp; i++) {
+				try {
+					System.out.println("Performing index search #" + (i + 1)
+							+ ": \"" + lyricsExp[i] + "\" with String path "
+							+ "created LyricsIndexFinder");
+					assertNotNull(lyinfiPath.find(lyricsExp[i]));
+				} catch (IOException e) {
+					fail(e.getMessage());
+				}
+			}
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
+
+		time = System.nanoTime() - time;
 		System.out.println("LyricsIndexFinder(String path) is created in: "
 				+ time);
-		for (int i = 0; i < numberOfLyricsExp; i++) {
-			try {
-				System.out.println("Performing index search #" + (i + 1) + ": \""
-						+ lyricsExp[i] + "\" with String path "
-						+ "created LyricsIndexFinder");
-				assertNotNull(lyinfiPath.find(lyricsExp[i]));
-			} catch (IOException e) {
-				fail(e.getMessage());
-			}
-		}
 
 		// IndexWriter instance case
-		try {
-			time = System.nanoTime();
-			lyinfiIW = new LyricsIndexFinder(indexWriter);
-			time = System.nanoTime() - time;
+
+		time = System.nanoTime();
+		try (LyricsIndexFinder lyinfiIW = new LyricsIndexFinder(indexWriter)) {
+			for (int i = 0; i < numberOfLyricsExp; i++) {
+				try {
+					System.out.println("Performing index search #" + (i + 1)
+							+ ": \"" + lyricsExp[i]
+							+ "\" with IndexWriter instance created "
+							+ "LyricsIndexFinder");
+					assertNotNull(lyinfiIW.find(lyricsExp[i]));
+				} catch (IOException e) {
+					fail(e.getMessage());
+				}
+			}
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
+
+		time = System.nanoTime() - time;
 		System.out.println("LyricsIndexFinder(IndexWriter iw) is created in: "
 				+ time);
-		for (int i = 0; i < numberOfLyricsExp; i++) {
-			try {
-				System.out.println("Performing index search #" + (i + 1) + ": \""
-						+ lyricsExp[i] + "\" with IndexWriter instance created "
-						+ "LyricsIndexFinder");
-				assertNotNull(lyinfiIW.find(lyricsExp[i]));
-			} catch (IOException e) {
-				fail(e.getMessage());
-			}
-		}
-	}
 
-	@After
-	public void closeAll() throws IOException {
-		try (Directory dir = FSDirectory.open(new File(indexDirPath))) {
-			if (IndexWriter.isLocked(dir)) {
-				IndexWriter.unlock(dir);
-			}
-		}
+	}
+	
+	@AfterClass public static void closeAll() throws CorruptIndexException, IOException {
+		indexWriter.commit();
+		indexWriter.close();
 	}
 
 }

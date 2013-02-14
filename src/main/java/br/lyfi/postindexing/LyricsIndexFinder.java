@@ -1,5 +1,6 @@
 package br.lyfi.postindexing;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import org.apache.lucene.store.FSDirectory;
  * @author migmruiz
  * 
  */
-public class LyricsIndexFinder {
+public class LyricsIndexFinder implements Closeable {
 	private IndexSearcher finder;
 	private IndexReader indexReader;
 
@@ -95,5 +96,10 @@ public class LyricsIndexFinder {
 		}
 		return documents;
 
+	}
+
+	@Override public void close() throws IOException {
+		indexReader.close();
+		finder.close();
 	}
 }

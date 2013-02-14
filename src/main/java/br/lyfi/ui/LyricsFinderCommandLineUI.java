@@ -1,5 +1,7 @@
 package br.lyfi.ui;
 
+import java.io.IOException;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -57,6 +59,12 @@ public class LyricsFinderCommandLineUI {
 				}
 				final String[] result = lyfi.find(cmd.getOptionValue("f"));
 				System.out.println(result[1]);
+				try {
+					lyfi.close();
+				} catch (IOException ioe) {
+					throw new RuntimeException(ioe);
+				}
+					
 			} else {
 				printUsage(options);
 			}

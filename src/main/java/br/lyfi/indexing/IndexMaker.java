@@ -1,5 +1,6 @@
 package br.lyfi.indexing;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,7 +16,6 @@ import org.apache.lucene.index.KeepOnlyLastCommitDeletionPolicy;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
-
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
@@ -31,14 +31,14 @@ import br.lyfi.preindexing.LyricsWebSearcher;
  * @author migmruiz
  * 
  */
-public class IndexMaker {
+public class IndexMaker implements Closeable {
 	private IndexWriter indexWriter;
-
-	/* Location of directory where index files are stored */
-	private final String indexDirectory;
 
 	/* Location of the data directory */
 	private final String dataDirectory;
+
+	/* Directory where index files are stored */
+	private final Directory fsDirectory;
 
 	/**
 	 * Constructor for the IndexMaker
@@ -48,9 +48,15 @@ public class IndexMaker {
 	 * @param dataDirectory
 	 *            Location of the data directory
 	 */
-	public IndexMaker(String indexDirectory, String dataDirectory) {
-		this.indexDirectory = indexDirectory;
+	public IndexMaker(final String indexDirectory, final String dataDirectory) {
 		this.dataDirectory = dataDirectory;
+
+		// Create instance of Directory where index files will be stored
+		try {
+		    this.fsDirectory  = FSDirectory.open(new File(indexDirectory));
+		} catch (IOException e) {
+		    throw new RuntimeException(e);
+	    }
 	}
 
 	/**
@@ -60,15 +66,12 @@ public class IndexMaker {
 	public void createIndexWriter() {
 		if (indexWriter == null) {
 
-			// Create instance of Directory where index files will be stored
-			try (final Directory fsDirectory = FSDirectory.open(new File(
-					indexDirectory));
-					final Analyzer standardAnalyzer = new StandardAnalyzer(
-							Version.LUCENE_36);) {
-				/*
-				 * Create instance of analyzer, which will be used to tokenize
-				 * the input data
-				 */
+			/*
+			 * Create instance of analyzer, which will be used to tokenize
+			 * the input data
+			 */
+			try (final Analyzer standardAnalyzer = new StandardAnalyzer(
+							Version.LUCENE_36)) {
 				
 				IndexWriterConfig config = new IndexWriterConfig(
 						Version.LUCENE_36, standardAnalyzer);
@@ -193,5 +196,9 @@ public class IndexMaker {
 			throw new RuntimeException(dataDirectory + " does not exist");
 		}
 		return dataDir.listFiles();
+	}
+	
+	@Override public void close() throws IOException {
+		fsDirectory.close();
 	}
 }

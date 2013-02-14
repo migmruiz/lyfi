@@ -1,5 +1,6 @@
 package br.lyfi.ui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -184,10 +185,13 @@ public class LyricsFinderSWT_UI extends Composite {
 	protected void doFind(String dataDirPath, String lyricsExp, String artist) {
 
 		// TODO Use given artist
-		final LyricsFinder lyfi = new LyricsFinder(dataDirPath);
-		final String[] result = lyfi.find(lyricsExp);
-		// TODO graphical output
-		System.out.println(result[1]);
+		try (final LyricsFinder lyfi = new LyricsFinder(dataDirPath)) {
+			final String[] result = lyfi.find(lyricsExp);
+			// TODO graphical output
+			System.out.println(result[1]);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

@@ -1,6 +1,4 @@
 target/
-main/test/resources/test/datadir/
-main/test/resources/test/indexdir/
 export/
 target/
 .project

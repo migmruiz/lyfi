@@ -145,7 +145,6 @@ public class LyricsIndexFinderTest {
 	}
 	
 	@AfterClass public static void closeAll() throws CorruptIndexException, IOException {
-		indexWriter.commit();
 		indexWriter.close();
 	}
 

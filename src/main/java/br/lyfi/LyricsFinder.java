@@ -30,11 +30,13 @@ public class LyricsFinder implements Closeable {
 	public final static String NAME = "Lyrics Finder";
 	public final static String SIMPLE_NAME = "lyfi";
 
-	public final static String IMG_APP_ICON_PATH = "resources"
+	public final static String IMG_APP_ICON_PATH = "src"
+			+ System.getProperty("file.separator") + "test"
+			+ System.getProperty("file.separator") + "resources"
 			+ System.getProperty("file.separator") + "icon_128x128.png";
 
-	// a path to directory where Lucene will store index files
-	private final String indexDirPath;
+	// an index maker for Lucene index files
+	private final IndexMaker indexMaker;
 	// a path to directory which contains data files that need to be indexed
 	private final String dataDirPath;
 	// whether or not forces a new indexing process
@@ -89,9 +91,9 @@ public class LyricsFinder implements Closeable {
 	 */
 	public LyricsFinder(final String indexDirPath, final String dataDirPath,
 			final boolean forceIndex) {
-		this.indexDirPath = indexDirPath;
 		this.dataDirPath = dataDirPath;
 		this.forceIndex = forceIndex;
+		this.indexMaker = new IndexMaker(indexDirPath, dataDirPath);
 
 		createLuceneIndex();
 		createIndexFinder();
@@ -146,7 +148,6 @@ public class LyricsFinder implements Closeable {
 	 * private indexWriter too
 	 */
 	private void createLuceneIndex() {
-		try (final IndexMaker indexMaker = new IndexMaker(indexDirPath, dataDirPath)) {
 			indexMaker.createIndexWriter();
 			indexWriter = indexMaker.getIndexWriter();
 			try {
@@ -159,9 +160,6 @@ public class LyricsFinder implements Closeable {
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
-		} catch (IOException ioe) {
-			throw new RuntimeException(ioe);
-		}
 	}
 
 	/**
@@ -195,7 +193,7 @@ public class LyricsFinder implements Closeable {
 	}
 
 	@Override public void close() throws IOException {
-		indexWriter.commit();
 		indexWriter.close();
+		indexMaker.close();
 	}
 }

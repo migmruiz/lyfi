@@ -23,6 +23,7 @@ public class LyricsFinderCommandLineUI {
 	/**
 	 * @param args
 	 */
+	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		final Options options = new Options();
 
@@ -46,21 +47,13 @@ public class LyricsFinderCommandLineUI {
 		try {
 			final CommandLine cmd = parser.parse(options, args);
 			if (cmd.hasOption("f")) {
-				final LyricsFinder lyfi;
-				if (cmd.hasOption("d")) {
-					if (cmd.hasOption("i")) {
-						lyfi = new LyricsFinder(cmd.getOptionValue("i"),
-								cmd.getOptionValue("d"));
-					} else {
-						lyfi = new LyricsFinder(cmd.getOptionValue("d"));
-					}
-				} else {
-					lyfi = new LyricsFinder();
-				}
+				try (final LyricsFinder lyfi = cmd.hasOption("d") ? 
+						(cmd.hasOption("i") ? 
+								new LyricsFinder(cmd.getOptionValue("i"), cmd.getOptionValue("d")) :
+							new LyricsFinder(cmd.getOptionValue("d"))) :
+						new LyricsFinder()) {
 				final String[] result = lyfi.find(cmd.getOptionValue("f"));
 				System.out.println(result[1]);
-				try {
-					lyfi.close();
 				} catch (IOException ioe) {
 					throw new RuntimeException(ioe);
 				}
@@ -96,8 +89,8 @@ public class LyricsFinderCommandLineUI {
 								+ " like a charm", options,
 						System.getProperty("line.separator")
 								+ "usage example: lyfi"
-								+ " -d ../resources/test/datadir/"
-								+ " -i ../resources/test/indexdir/"
+								+ " -d ../src/test/resources/test/datadir/"
+								+ " -i ../src/test/resources/test/indexdir/"
 								+ " -f \"better\"");
 	}
 

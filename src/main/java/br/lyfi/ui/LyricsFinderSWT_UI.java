@@ -47,7 +47,7 @@ public class LyricsFinderSWT_UI extends Composite {
 
 	public LyricsFinderSWT_UI(Shell shell, int style) {
 		super(shell, style);
-		_fields = new ArrayList<Text>();
+		_fields = new ArrayList<>();
 		_dataDirFileDialog = new DirectoryDialog(shell, SWT.OPEN);
 		createGui();
 	}
@@ -118,7 +118,7 @@ public class LyricsFinderSWT_UI extends Composite {
 		_dataDirBrowse = createButton(browseButton, "&Browse",
 				"Browse and select" + " the audio library directory",
 				new SelectionAdapter() {
-					public void widgetSelected(SelectionEvent e) {
+					@Override public void widgetSelected(SelectionEvent e) {
 						String filename = _dataDirFileDialog.open();
 						if (filename != null) {
 							_dataDirField.setText(filename);
@@ -149,7 +149,7 @@ public class LyricsFinderSWT_UI extends Composite {
 
 		_findButton = createButton(buttons, "&Find", "Process input and find"
 				+ " the matching audio file", new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
+			@Override public void widgetSelected(SelectionEvent e) {
 				// TODO graphical output
 				System.out.println("Data directory path:         "
 						+ _dataDirField.getText());
@@ -165,7 +165,7 @@ public class LyricsFinderSWT_UI extends Composite {
 
 		_clearButton = createButton(buttons, "&Clear", "clear inputs",
 				new SelectionAdapter() {
-					public void widgetSelected(SelectionEvent e) {
+					@Override public void widgetSelected(SelectionEvent e) {
 						clearFields();
 						_lyricsField.forceFocus();
 					}

@@ -59,16 +59,17 @@ public class IndexMaker {
 	 */
 	public void createIndexWriter() {
 		if (indexWriter == null) {
-			try {
-				File path = new File(indexDirectory);
-				// Create instance of Directory where index files will be stored
-				Directory fsDirectory = FSDirectory.open(path);
+
+			// Create instance of Directory where index files will be stored
+			try (final Directory fsDirectory = FSDirectory.open(new File(
+					indexDirectory));
+					final Analyzer standardAnalyzer = new StandardAnalyzer(
+							Version.LUCENE_36);) {
 				/*
 				 * Create instance of analyzer, which will be used to tokenize
 				 * the input data
 				 */
-				Analyzer standardAnalyzer = new StandardAnalyzer(
-						Version.LUCENE_36);
+				
 				IndexWriterConfig config = new IndexWriterConfig(
 						Version.LUCENE_36, standardAnalyzer);
 				// Configure the deletion policy
@@ -112,16 +113,17 @@ public class IndexMaker {
 					if (tag == null) {
 						System.out.println("warning: The file " + file
 								+ " doesn't have any tag");
-					}
-					lyrics = tag.getFirst(FieldKey.LYRICS);
-					artist = tag.getFirst(FieldKey.ARTIST);
-					title = tag.getFirst(FieldKey.TITLE);
-					if (!Pattern.matches("\\s*", lyrics)) {
-						// lyrics already in the mp3 file, use it!
 					} else {
-						// if not we want to look for the lyrics in the web
-						final LyricsWebSearcher webSearcher = new LyricsWebSearcher();
-						lyrics = webSearcher.fetchLyrics(artist, title);
+						lyrics = tag.getFirst(FieldKey.LYRICS);
+						artist = tag.getFirst(FieldKey.ARTIST);
+						title = tag.getFirst(FieldKey.TITLE);
+						if (!Pattern.matches("\\s*", lyrics)) {
+							// lyrics already in the mp3 file, use it!
+						} else {
+							// if not we want to look for the lyrics in the web
+							final LyricsWebSearcher webSearcher = new LyricsWebSearcher();
+							lyrics = webSearcher.fetchLyrics(artist, title);
+						}
 					}
 
 				} catch (Exception e) {

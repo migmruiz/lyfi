@@ -145,11 +145,7 @@ public class LyricsIndexFinderTest {
 
 	@After
 	public void closeAll() throws IOException {
-		Directory dir = null;
-		try {
-			dir = FSDirectory.open(new File(indexDirPath));
-			indexWriter.close();
-		} finally {
+		try (Directory dir = FSDirectory.open(new File(indexDirPath))) {
 			if (IndexWriter.isLocked(dir)) {
 				IndexWriter.unlock(dir);
 			}

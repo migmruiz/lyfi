@@ -99,15 +99,7 @@ public class LyricsFinder {
 		createIndexFinder();
 
 		// close the indexWriter
-		Directory dir = null;
-		try {
-			dir = FSDirectory.open(new File(indexDirPath));
-			indexWriter.close();
-		} catch (CorruptIndexException e) {
-			throw new RuntimeException("Index is corrupted", e);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} finally {
+		try (Directory dir = FSDirectory.open(new File(indexDirPath))){
 			try {
 				if (IndexWriter.isLocked(dir)) {
 					IndexWriter.unlock(dir);
@@ -115,6 +107,10 @@ public class LyricsFinder {
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
+		} catch (CorruptIndexException e) {
+			throw new RuntimeException("Index is corrupted", e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
